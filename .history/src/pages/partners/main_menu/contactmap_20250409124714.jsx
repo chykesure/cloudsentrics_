@@ -1,0 +1,53 @@
+import React from "react";
+
+const HoustonOffice = () => {
+  return (
+    <div className="bg-[#f9fafb] py-16 px-4 sm:px-6 lg:px-20">
+      <h2 className="text-3xl font-semibold text-gray-800 mb-10">Our Office Location</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        {/* Left Card: Office Info */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-bold text-blue-900 mb-4">Houston Office</h3>
+          <p className="text-gray-700 mb-3">
+            3354 Rogerdale Rd, Houston, TX, United States, Texas
+          </p>
+          <p className="text-gray-800 font-medium">
+            Call: <a href="tel:+1442392825925" className="text-blue-600">+1 442 392 825925</a>
+          </p>
+        </div>
+
+        {/* Right Card: Google Map */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <iframe
+            title="Houston Office Map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13807.84773977804!2d-95.56307065!3d29.72636405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640c4fd9d2f11d1%3A0x3dcb9674fa5e6f01!2s3354%20Rogerdale%20Rd%2C%20Houston%2C%20TX%2077036%2C%20USA!5e0!3m2!1sen!2sng!4v1712663541234!5m2!1sen!2sng"
+            width="100%"
+            height="250"
+            style={{ border: "0" }}
+            allowFullScreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+      {/* Bottom Info Boxes Below the Map */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <h4 className="text-lg font-semibold text-gray-800 mb-2">Call Us</h4>
+          <p className="text-gray-600">+1 442 392 825925</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
+          <p className="text-gray-600">support@chyketech.com</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <h4 className="text-lg font-semibold text-gray-800 mb-2">Working Hours</h4>
+          <p className="text-gray-600">Mon - Fri: 9:00 AM - 5:00 PM</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HoustonOffice;
