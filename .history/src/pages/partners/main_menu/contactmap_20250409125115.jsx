@@ -19,8 +19,8 @@ const ContactMap = () => {
                 </p>
                 <p className="text-gray-800 font-medium">
                     Email:{" "}
-                    <a href="mailto:info4cloudsentrics@gmail.com" className="text-blue-600">
-                        info4cloudsentrics@gmail.com
+                    <a href="mailto:info@cloudsentrics.org " className="text-blue-600">
+                        info@cloudsentrics.org
                     </a>
                 </p>
             </div>
@@ -46,7 +46,7 @@ const ContactMap = () => {
                 </div>
                 <div className="bg-white rounded-lg shadow-md p-6 text-center">
                     <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
-                    <p className="text-gray-600">info4cloudsentrics@gmail.com</p>
+                    <p className="text-gray-600">info@cloudsentrics.org </p>
                 </div>
                 <div className="bg-white rounded-lg shadow-md p-6 text-center">
                     <h4 className="text-lg font-semibold text-gray-800 mb-2">Working Hours</h4>

@@ -10,7 +10,7 @@ const ContactMap = () => {
                 <p className="text-gray-700 text-lg mb-6">
                     Cloud Sentrics is the ultimate launchpad for your career in Cloud DevSecOps designed for everyone, regardless of your tech background. Whether you're new to IT or looking to upskill, our expert-led training equips you with the hands-on experience and industry certifications needed to thrive in the cloud.
                 </p>
-                <a 
+                <a
                     href="#"
                     className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition-colors"
                 >
@@ -37,15 +37,15 @@ const ContactMap = () => {
                     </p>
                     <p className="text-gray-800 font-medium flex items-center gap-2">
                         <FaEnvelope className="w-5 h-5 text-blue-600" />
-                        <a href="mailto:info4cloudsentrics@gmail.com" className="text-blue-600 hover:underline">
-                            info4cloudsentrics@gmail.com
+                        <a href="mailto:info@cloudsentrics.org " className="text-blue-600 hover:underline">
+                            info@cloudsentrics.org
                         </a>
                     </p>
 
                     <h2 className="text-3xl font-semibold text-gray-800 mb-4">Cloud Sentrics</h2>
-                <p className="text-gray-700 text-lg mb-6">
-                    Cloud Sentrics is the ultimate launchpad for your career in Cloud DevSecOps designed for everyone, regardless of your tech background. Whether you're new to IT or looking to upskill, our expert-led training equips you with the hands-on experience and industry certifications needed to thrive in the cloud.
-                </p>
+                    <p className="text-gray-700 text-lg mb-6">
+                        Cloud Sentrics is the ultimate launchpad for your career in Cloud DevSecOps designed for everyone, regardless of your tech background. Whether you're new to IT or looking to upskill, our expert-led training equips you with the hands-on experience and industry certifications needed to thrive in the cloud.
+                    </p>
                 </div>
 
                 {/* Quick Contact Boxes */}
@@ -61,7 +61,7 @@ const ContactMap = () => {
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
                         <p className="text-gray-600">
                             <FaEnvelope className="inline-block mr-2 text-blue-600" />
-                            info4cloudsentrics@gmail.com
+                            info@cloudsentrics.org
                         </p>
                     </div>
                     <div className="bg-white rounded-xl shadow-lg p-6 text-center transition-transform transform hover:scale-105">

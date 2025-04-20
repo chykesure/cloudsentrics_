@@ -21,8 +21,8 @@ const ContactMap = () => {
                     </p>
                     <p className="text-gray-800 font-medium flex items-center gap-2">
                         <FaEnvelope className="w-5 h-5 text-blue-600" />
-                        <a href="mailto:info4cloudsentrics@gmail.com" className="text-blue-600 hover:underline">
-                            info4cloudsentrics@gmail.com
+                        <a href="mailto:info@cloudsentrics.org " className="text-blue-600 hover:underline">
+                            info@cloudsentrics.org
                         </a>
                     </p>
 

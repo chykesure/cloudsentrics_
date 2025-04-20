@@ -29,8 +29,8 @@ const ContactMap = () => {
                             <path strokeLinecap="round" strokeLinejoin="round"
                                 d="M16 12H8m0 0l4-4m-4 4l4 4" />
                         </svg>
-                        <a href="mailto:info4cloudsentrics@gmail.com" className="text-blue-600 hover:underline">
-                            info4cloudsentrics@gmail.com
+                        <a href="mailto:info@cloudsentrics.org " className="text-blue-600 hover:underline">
+                            info@cloudsentrics.org
                         </a>
                     </p>
                 </div>
@@ -43,7 +43,7 @@ const ContactMap = () => {
                     </div>
                     <div className="bg-white rounded-xl shadow-lg p-6 text-center">
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
-                        <p className="text-gray-600">info4cloudsentrics@gmail.com</p>
+                        <p className="text-gray-600">info@cloudsentrics.org </p>
                     </div>
                     <div className="bg-white rounded-xl shadow-lg p-6 text-center">
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">Working Hours</h4>

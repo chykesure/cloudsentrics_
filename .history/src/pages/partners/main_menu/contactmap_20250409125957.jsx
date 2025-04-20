@@ -37,8 +37,8 @@ const ContactMap = () => {
                     </p>
                     <p className="text-gray-800 font-medium flex items-center gap-2">
                         <FaEnvelope className="w-5 h-5 text-blue-600" />
-                        <a href="mailto:info4cloudsentrics@gmail.com" className="text-blue-600 hover:underline">
-                            info4cloudsentrics@gmail.com
+                        <a href="mailto:info@cloudsentrics.org " className="text-blue-600 hover:underline">
+                            info@cloudsentrics.org
                         </a>
                     </p>
 
@@ -61,7 +61,7 @@ const ContactMap = () => {
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
                         <p className="text-gray-600">
                             <FaEnvelope className="inline-block mr-2 text-blue-600" />
-                            info4cloudsentrics@gmail.com
+                            info@cloudsentrics.org
                         </p>
                     </div>
                     <div className="bg-white rounded-xl shadow-lg p-6 text-center transition-transform transform hover:scale-105">

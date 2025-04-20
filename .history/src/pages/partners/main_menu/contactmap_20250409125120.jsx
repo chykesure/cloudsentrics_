@@ -6,7 +6,7 @@ const ContactMap = () => {
             <h2 className="text-3xl font-semibold text-gray-800 mb-10">Contact & Support</h2>
 
             {/* Office Info Card */}
-            
+
 
             {/* Standalone Full-Width Map */}
             <div className="w-full">
@@ -29,7 +29,7 @@ const ContactMap = () => {
                 </div>
                 <div className="bg-white rounded-lg shadow-md p-6 text-center">
                     <h4 className="text-lg font-semibold text-gray-800 mb-2">Email Us</h4>
-                    <p className="text-gray-600">info4cloudsentrics@gmail.com</p>
+                    <p className="text-gray-600">info@cloudsentrics.org </p>
                 </div>
                 <div className="bg-white rounded-lg shadow-md p-6 text-center">
                     <h4 className="text-lg font-semibold text-gray-800 mb-2">Working Hours</h4>
