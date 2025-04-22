@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGraduationCap, FaBriefcase, FaCloud, FaShieldAlt, FaUserTie, FaHandshake, FaCogs, FaNetworkWired, FaWhatsapp, FaGlobe, FaChartLine, FaRocket } from "react-icons/fa";
+import { FaRocket, FaGlobe, FaChartLine } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import Header from "../pages/Header"; // Import Header component
 import Footer from "../pages/Footer"; // Import Header component
 import TestimonialPage from "./students/Reviews";
 import TestimonialSlider from "./students/Testimony";
 import TestimonialLanding from "./students/TestimonyLanding";
+
+import { MdCloudDone, MdWork } from "react-icons/md";
+import { FaUserShield, FaNetworkWired } from "react-icons/fa";
+import { SiGooglecloud } from "react-icons/si";
+import { GiTeacher } from "react-icons/gi";
 
 
 const trainingImage = "/assets/sentrics5.jpg";
@@ -88,161 +93,150 @@ const LandingPage = () => {
 
 
             {/* FLEX CONTAINER FOR BOTH SECTIONS */}
-            <div className="w-screen mb-7 px-6">
-                {/* === FOR STUDENTS SECTION === */}
-                <motion.section
-                    whileHover={{ y: -10, boxShadow: "0px 10px 20px rgba(0,0,0,0.15)" }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full block bg-white/80 shadow-lg rounded-lg p-8 md:p-12 min-h-[500px]"
-                >
+            <div className="w-full px-4 md:px-6 mb-12">
+                <div className="flex flex-col md:flex-row gap-8">
+                    {/* === STUDENTS CARD === */}
+                    <motion.section
+                        whileHover={{ y: -5, boxShadow: "0px 5px 15px rgba(0,0,0,0.1)" }}
+                        transition={{ duration: 0.3 }}
+                        className="flex-1 bg-white/80 rounded-xl shadow-md p-6 md:p-10 flex flex-col"
+                    >
+                        <img
+                            src={trainingImage}
+                            alt="Student Learning"
+                            className="w-full h-[550px] object-cover rounded-lg mb-6"
+                        />
 
-                    {/* TEXT CONTENT */}
-                    <div className="w-full flex flex-col md:flex-row justify-between px-6 mt-6">
-                        {/* Left side (Text content) */}
-                        <div className="w-full md:w-1/2 flex flex-col justify-between">
-                            <h2 className="text-3xl font-bold text-gray-800">Why Learn From Us?</h2>
+                        <h2 className="text-3xl font-bold text-gray-800 mb-6">Why Learn From Us?</h2>
 
-                            <div className="space-y-6 mt-4">
-                                <div className="flex items-center space-x-6">
-                                    <FaGraduationCap className="text-blue-600 text-6xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Real-World Learning Approach</h3>
-                                        <p className="text-gray-600 text-sm">
-                                            Our tutors use real-life tasks to mentor students, making complex concepts in Cloud Services easier to grasp.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaBriefcase className="text-blue-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Industry-Relevant Skills</h3>
-                                        <p className="text-gray-600 text-sm">
-                                            Gain hands-on experience in Cloud Engineering, Security, and Networking, focused on AWS and Azure.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaUserTie className="text-blue-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Personalized Mentorship</h3>
-                                        <p className="text-gray-600 text-sm">
-                                            Learn directly from industry experts who guide you towards career success.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaHandshake className="text-blue-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Job Placement Support</h3>
-                                        <p className="text-gray-600 text-sm">
-                                            Get access to job opportunities and career development resources.
-                                        </p>
-                                    </div>
-                                </div>
+                        <div className="space-y-6 flex-grow">
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <GiTeacher className="text-blue-500" />
+                                    Real-World Learning Approach
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    Our tutors use real-life tasks to mentor students, making complex concepts in Cloud Services easier to grasp.
+                                </p>
                             </div>
 
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.2 }}
-                                className="mt-6 bg-blue-600 text-white px-8 py-3 text-lg rounded-lg shadow-md hover:bg-blue-700 transition-all"
-                                onClick={() => navigate('/StudentPage')}
-                            >
-                                Enroll Now
-                            </motion.button>
-                        </div>
-
-                        {/* Right side (Image) */}
-                        <div className="w-full md:w-1/2 flex justify-center md:ml-6">
-                            <img
-                                src={trainingImage}
-                                alt="Student Learning"
-                                className="w-full h-full object-cover rounded-lg"
-                            />
-                        </div>
-                    </div>
-
-                </motion.section>
-
-                {/* === FOR CLIENTS SECTION === */}
-                <motion.section
-                    whileHover={{ y: -10, boxShadow: "0px 10px 20px rgba(0,0,0,0.15)" }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full block bg-white/80 shadow-lg rounded-lg p-8 md:p-12 min-h-[500px] mt-7"
-                >
-
-                    {/* TEXT CONTENT */}
-                    <div className="w-full flex flex-col md:flex-row justify-between px-6 mt-6">
-                        {/* Left side (Text content) */}
-                        <div className="w-full md:w-1/2 flex flex-col justify-between">
-                            <h2 className="text-3xl font-bold text-gray-800">Why Work With Us?</h2>
-
-                            <div className="space-y-6 mt-4">
-                                <div className="flex items-center space-x-6">
-                                    <FaCloud className="text-green-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Seamless On-Prem to Cloud Migration</h3>
-                                        <p className="text-gray-600 text-sm">We help businesses migrate workloads to AWS and Azure with efficiency and security.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaShieldAlt className="text-green-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">End-to-End Cloud Security</h3>
-                                        <p className="text-gray-600 text-sm">Our team ensures that workloads deployed on the Cloud remain secure and compliant.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaNetworkWired className="text-green-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Optimized Cloud Networking</h3>
-                                        <p className="text-gray-600 text-sm">We design, implement, and manage cloud networks for scalability and performance.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaCogs className="text-green-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Tailored Cloud Solutions</h3>
-                                        <p className="text-gray-600 text-sm">From architecture to deployment, we provide custom cloud strategies that align with business goals.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-6">
-                                    <FaUserTie className="text-green-600 text-5xl" />
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800 text-lg">Qualified Cloud Professionals</h3>
-                                        <p className="text-gray-600 text-sm">We provide certified Cloud experts to work on your projects, ensuring seamless execution and technical excellence.</p>
-                                    </div>
-                                </div>
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <MdCloudDone className="text-blue-500" />
+                                    Industry-Relevant Skills
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    Gain hands-on experience in Cloud Engineering, Security, and Networking, focused on AWS and Azure.
+                                </p>
                             </div>
 
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.2 }}
-                                className="mt-6 bg-green-600 text-white px-8 py-3 text-lg rounded-lg shadow-md hover:bg-green-700 transition-all"
-                                onClick={() => navigate('/PartnerPage')}
-                            >
-                                Partner With Us
-                            </motion.button>
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <GiTeacher className="text-blue-500" />
+                                    Personalized Mentorship
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    Learn directly from industry experts who guide you towards career success.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <MdWork className="text-blue-500" />
+                                    Job Placement Support
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    Get access to job opportunities and career development resources.
+                                </p>
+                            </div>
                         </div>
 
-                        {/* Right side (Image) */}
-                        <div className="w-full md:w-1/2 flex justify-center md:ml-6">
-                            <img
-                                src={consultingImage}
-                                alt="Business Consulting"
-                                className="w-full h-full object-cover rounded-lg"
-                            />
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 self-start"
+                            onClick={() => navigate('/StudentPage')}
+                        >
+                            Enroll Now
+                        </motion.button>
+                    </motion.section>
+
+                    {/* === CLIENTS CARD === */}
+                    <motion.section
+                        whileHover={{ y: -5, boxShadow: "0px 5px 15px rgba(0,0,0,0.1)" }}
+                        transition={{ duration: 0.3 }}
+                        className="flex-1 bg-white/80 rounded-xl shadow-md p-6 md:p-10 flex flex-col"
+                    >
+                        <img
+                            src={consultingImage}
+                            alt="Business Consulting"
+                            className="w-full h-[550px] object-cover rounded-lg mb-6 flex-shrink-0"
+                        />
+
+                        <h2 className="text-3xl font-bold text-gray-800 mb-6">Why Work With Us?</h2>
+
+                        <div className="space-y-6 flex-grow">
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <SiGooglecloud className="text-green-500" />
+                                    Seamless On-Prem to Cloud Migration
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    We help businesses migrate workloads to AWS and Azure with efficiency and security.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <FaUserShield className="text-green-500" />
+                                    End-to-End Cloud Security
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    Our team ensures that workloads deployed on the Cloud remain secure and compliant.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <FaNetworkWired className="text-green-500" />
+                                    Optimized Cloud Networking
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    We design, implement, and manage cloud networks for scalability and performance.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <MdCloudDone className="text-green-500" />
+                                    Tailored Cloud Solutions
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    From architecture to deployment, we provide custom cloud strategies that align with business goals.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    <MdWork className="text-green-500" />
+                                    Qualified Cloud Professionals
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                    We provide certified Cloud experts to work on your projects, ensuring seamless execution and technical excellence.
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-
-                </motion.section>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-8 bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 self-start"
+                            onClick={() => navigate('/PartnerPage')}
+                        >
+                            Partner With Us
+                        </motion.button>
+                    </motion.section>
+                </div>
             </div>
 
 

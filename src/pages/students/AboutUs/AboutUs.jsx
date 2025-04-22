@@ -1,9 +1,9 @@
-import React from "react";
 import Headers from "../../students/Header"; // Ensure Header is included
 import { AiOutlineCloud, AiOutlineUser, AiOutlineTeam, AiOutlineTrophy } from "react-icons/ai";
 import { color, motion } from "framer-motion";
 import { FaCloud, FaServer, FaPython, FaUserShield, FaDocker, FaLock, FaNetworkWired, FaRocket, FaWhatsapp } from "react-icons/fa";
 import FooterPage from "../../Footer";
+import React, { useState, useRef } from 'react';
 
 const consultingImage = "/assets/sentrics3.jpg";
 const aboutImage = "/assets/cds1.jpg";
@@ -57,6 +57,77 @@ const AboutUs = () => {
         fade: true
 
     };
+
+    const countries = ['Nigeria', 'United States', 'Canada', 'United Kingdom', 'Ghana'];
+
+    const formRef = useRef(); // Initialize formRef using useRef
+
+    const [successMessage, setSuccessMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        country: '',
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true); // Show "Submitting" text
+
+        // Collect form data using formRef and formRef.current.elements
+        const data = {
+            user_name: formRef.current.elements.name.value,
+            user_email: formRef.current.elements.email.value,
+            user_phone: formRef.current.elements.phone.value,
+            user_country: formRef.current.elements.country.value,
+        };
+
+        try {
+            console.log('Sending data:', data); // Log the data to ensure it's being sent
+
+            const response = await fetch('http://localhost:5000/api/getintouch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            console.log(result); // Log the response from the server
+
+            if (response.ok) {
+                setSuccessMessage(`
+                    <div className="mt-6 space-y-2 text-sm pb-4">
+                        <p>Your message has been successfully sent! We will get back to you within 24 hours.</p>
+                        <p>If you need immediate assistance, please contact us at <a href="mailto:info@cloudsentrics.com" className="underline">info@cloudsentrics.com</a>.</p>
+                        <p className="italic text-gray-400">Thank you for reaching out to Cloud Sentrics!</p>
+                    </div>
+                `);
+                setIsSuccess(true); // Set success state to true
+            } else {
+                setErrorMessage('❌ Failed to submit the enquiry. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setErrorMessage('An error occurred while submitting the form.');
+        } finally {
+            setIsSubmitting(false); // Hide "Submitting" text
+        }
+    };
+
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Headers />
@@ -328,40 +399,64 @@ const AboutUs = () => {
                             Tell us a bit about yourself, and we’ll reach out within 24 hours.
                         </p>
 
-                        <form className="mt-6 space-y-5">
-                            <input
-                                type="text"
-                                placeholder="Your Name*"
-                                className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                        {isSuccess ? (
+                            <div
+                                className="success-message mt-4 text-green-400"
+                                dangerouslySetInnerHTML={{ __html: successMessage }}
                             />
-                            <input
-                                type="email"
-                                placeholder="Your Email*"
-                                className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            />
-                            <select
-                                className="w-full p-4 rounded-lg bg-[#283d5b] text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            >
-                                <option>Select Your Country</option>
-                                {countries.map((country, index) => (
-                                    <option key={index} value={country} className="text-black">
-                                        {country}
-                                    </option>
-                                ))}
-                            </select>
-                            <input
-                                type="text"
-                                placeholder="Your Phone Number*"
-                                className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            />
-                            <button
-                                className="bg-yellow-400 text-black font-bold py-4 px-6 rounded-lg w-full transition duration-300 hover:bg-yellow-500"
-                            >
-                                Join Now
-                            </button>
-                        </form>
+                        ) : (
+                            <form onSubmit={handleSubmit} ref={formRef} className="mt-6 space-y-5">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Your Name*"
+                                    required
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Your Email*"
+                                    required
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <select
+                                    name="country"
+                                    required
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                    className="w-full p-4 rounded-lg bg-[#283d5b] text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                >
+                                    <option value="">Select Your Country</option>
+                                    {['USA', 'Canada', 'UK', 'India'].map((country, index) => (
+                                        <option key={index} value={country} className="text-black">
+                                            {country}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Your Phone Number*"
+                                    required
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className="w-full p-4 rounded-lg bg-[#283d5b] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="bg-yellow-400 text-black font-bold py-4 px-6 rounded-lg w-full transition duration-300 hover:bg-yellow-500"
+                                >
+                                    {isSubmitting ? "Submitting..." : "Join Now"}
+                                </button>
+                            </form>
+                        )}
                     </div>
-
 
                     {/* Right Section - Image */}
                     <div className="md:w-1/2 flex justify-center relative p-4">
@@ -378,7 +473,6 @@ const AboutUs = () => {
                             </div>
                         </div>
                     </div>
-
                 </section>
 
 

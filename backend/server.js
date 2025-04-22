@@ -153,6 +153,24 @@ app.use('/api', (req, res, next) => {
     next();
 }, paymentRoutes);
 
+// Contact form route
+const contactRoute = require('./api/contactRoute');
+app.use('/api', contactRoute());
+
+// Career form route
+const careerRoute = require('./api/careerRoute'); // adjust path accordingly
+app.use('/api', careerRoute);
+
+
+// enquiry form route
+const enquiryRoute = require('./api/enquiryRoute'); // adjust path accordingly
+app.use('/api', enquiryRoute);
+
+// get in touch form route
+const getintouchRoute = require('./api/getintouchRoute'); // adjust path accordingly
+app.use('/api', getintouchRoute);
+
+
 
 // Start server
 app.listen(PORT, () => {

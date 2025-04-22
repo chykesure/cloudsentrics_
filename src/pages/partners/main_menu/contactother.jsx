@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Swal from "sweetalert2";
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,10 @@ const ContactForm = () => {
         message: "",
         consent: false,
     });
+    
+
+    const [isProcessing, setIsProcessing] = useState(false);
+    const formRef = useRef(null);
 
     const services = [
         "Cloud Migration",
@@ -40,11 +45,59 @@ const ContactForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitted data:", formData);
-        // You can post to an API here
+        setIsProcessing(true);
+
+        try {
+            const response = await fetch("http://localhost:5000/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    services: formData.services.join(", "),
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            Swal.fire({
+                icon: "success",
+                title: "Form submitted successfully!",
+                text: "We have received your message and will get back to you shortly.",
+                confirmButtonText: "Great!",
+            });
+
+            // Reset form
+            setFormData({
+                firstName: "",
+                lastName: "",
+                companyName: "",
+                industry: "",
+                email: "",
+                phone: "",
+                services: [],
+                message: "",
+                consent: false,
+            });
+
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `Something went wrong: ${error.message}`,
+                confirmButtonText: "Try Again",
+            });
+        }
+
+        setIsProcessing(false);
     };
+
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-gray-50 text-black">
@@ -53,7 +106,7 @@ const ContactForm = () => {
                 <h2 className="text-2xl font-semibold mb-4">Contact Us For A Consultation</h2>
                 <button className="bg-blue-800 text-white px-4 py-2 rounded mb-6">Email us</button>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <input
                             type="text"
@@ -127,9 +180,10 @@ const ContactForm = () => {
                                 </label>
                             ))}
                         </div>
+                        {/* Hidden input to send selected services as a single string */}
+                        <input type="hidden" name="selectedServices" value={formData.services.join(", ")} />
                     </div>
 
-                    {/* Message */}
                     <textarea
                         name="message"
                         placeholder="How can we help?"
@@ -149,16 +203,16 @@ const ContactForm = () => {
                         <label>I agree to receive other communications from CloudSentrics Integration.</label>
                     </div>
 
-                    {/* CAPTCHA Placeholder */}
                     <div className="bg-gray-200 rounded p-4 w-fit text-sm text-gray-700">
                         reCAPTCHA Placeholder
                     </div>
 
                     <button
                         type="submit"
+                        disabled={isProcessing}
                         className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
                     >
-                        Submit
+                        {isProcessing ? "Submitting..." : "Submit"}
                     </button>
                 </form>
             </div>
@@ -173,7 +227,7 @@ const ContactForm = () => {
                     <p className="text-sm text-gray-500 mt-1">Our team is available Monday – Friday, 9am to 5pm (GMT).</p>
                 </div>
 
-                {/* Press & Media Enquiries */}
+                {/* Press & Media */}
                 <div className="bg-white shadow rounded p-4">
                     <h4 className="text-lg font-semibold border-b pb-1 mb-2">Press & Media Enquiries</h4>
                     <p className="text-gray-700">
@@ -183,7 +237,7 @@ const ContactForm = () => {
                     <p className="mt-2">
                         Please contact{" "}
                         <a href="mailto:info@cloudsentrics.org" className="text-blue-600 underline">
-                        info@cloudsentrics.org
+                            info@cloudsentrics.org
                         </a>{" "}
                         for all press and media-related queries.
                     </p>
@@ -192,7 +246,7 @@ const ContactForm = () => {
                     </p>
                 </div>
 
-                {/* Careers with Bell */}
+                {/* Careers */}
                 <div className="bg-white shadow rounded p-4">
                     <h4 className="text-lg font-semibold border-b pb-1 mb-2">Careers with CloudSentrics</h4>
                     <p className="italic text-gray-700 mb-2">

@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 const rev1 = "/assets/review1.mp4";
 const rev2 = "/assets/review2.mp4";
 const rev3 = "/assets/review3.mp4";
+const rev4 = "/assets/testi1.mp4";
 
 const testimonials = [
     {
@@ -29,6 +30,13 @@ const testimonials = [
         title: "Chinedu",
         subtitle: "Cloud Security Engineer",
         description: "“The structured learning path gave me the confidence to specialize in cloud security.”"
+    },
+    {
+        id: 4,
+        url: rev4,
+        title: "Segun Ogunkoya",
+        subtitle: "Cloud Security Engineer",
+        description: "“The structured path built my confidence to focus on cloud security.”"
     }
 ];
 

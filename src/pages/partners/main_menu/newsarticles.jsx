@@ -1,90 +1,66 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import Modal from "./Modal"; // We'll define this below
 
 // Image imports
 const ai_trainning = "/assets/ai_trainning.jpg";
 const ai_conversation = "/assets/ai_conversation.jpg";
 const ai_ops = "/assets/ai_ops.jpg";
-const bpa = "/assets/bpa.jpg";
-const iot1 = "/assets/iot1.jpg";
-const iot_data = "/assets/iot_data.jpg";
-const iot_solution = "/assets/iot_solution.jpg";
-const cloudchip = "/assets/cloud-chip.jpg";
-const aibg = "/assets/ai.jpg";
-const security = "/assets/cloud-security.jpg";
-const data = "/assets/data-trans.jpg";
 
 // All articles
 const allArticles = [
   {
-    title: "Cloud Sentrics & Pure Storage Unveil AI Innovation",
+    id: 1,
+    title: "Cloud Sentrics: Empowering Cloud Experts of Tomorrow",
     image: ai_trainning,
-    description: "Cloud Sentrics and Pure Storage showcase ‘Nature in the Age of AI’",
+    description: "Cloud Sentrics Rises as the No. 1 U.S.-Based Cloud Solution Provider",
     highlight: true,
+    content: `Since its inception in July 2023, Cloud Sentrics has quickly become a leading name in the cloud education space. As a U.S.-based cloud training and consulting provider, Cloud Sentrics has trained over 100 students globally, many of whom have landed promising roles in cloud engineering, security, and DevSecOps.
+
+What sets Cloud Sentrics apart? It’s the company’s commitment to hands-on training and real-world cloud problem-solving scenarios that prepare students for the competitive tech market. Each course is built with practical applications in mind, offering students access to cloud labs, real-time simulations, and mentorship from seasoned professionals.
+
+Two graduates shared powerful testimonials on how Cloud Sentrics transformed their careers:
+
+"Cloud_Sentrics enhanced my entire knowledge base in tech. The lectures simulate real-life scenarios, which helped me better comprehend how to navigate AWS resources. Overall, the tutor did an amazing job in thoroughly addressing all of my major concerns, providing me the comfort I need to succeed in the cloud security space." — Leslie E. Tetteh
+
+"Cloud Sentrics didn’t just teach me cloud engineering—it empowered me. Through expert-led training and hands-on experience, I gained not only technical mastery but also the confidence to apply it in real-world scenarios..." — Thomas Idowu Lawrence
+
+With enrollment now open for Batch 7 starting on May 24th, 2025, Cloud Sentrics is inviting new students to embark on their transformative tech journey.`,
   },
   {
-    title: "Cloud Sentrics CEO On Procurement Spin Off",
+    id: 2,
+    title: "Meet the Visionary - Oludare Odo, Founder of Cloud Sentrics",
     image: ai_conversation,
-    description: "And how AI at scale makes us quite different",
+    description: "From Personal Struggles to a Mission to Empower",
     highlight: true,
+    content: `Oludare Odo didn’t have a roadmap when he started his journey into Cloud DevSecOps. He learned on the job, navigating complex systems while trying to build a meaningful career in the tech industry. It was a journey filled with late nights, trial and error, and moments of overwhelming self-doubt.
+
+"At times, I felt like giving up," he shared. "But I knew I needed a structured program - one that provided guidance, collaboration, and a learning community."
+
+That vision led to the creation of Cloud Sentrics—a platform built to provide aspiring cloud engineers with exactly what Oludare once wished for: hands-on guidance, collaborative learning, and expert mentorship.
+
+His mission remains clear: to help others break into the tech industry, even without a traditional IT background. Cloud Sentrics is not just about training, it’s about transforming lives.`,
   },
   {
-    title: "Cloud Migration: A 5 Step Guide",
+    id: 3,
+    title: "Cloud Sentrics - Your Trusted Partner in Cloud Solutions",
     image: ai_ops,
-  },
-  {
-    title: "Making Sense of the AI Chatbot Market",
-    image: bpa,
-  },
-  {
-    title: "Guide to Cloud Migration for Modern Businesses",
-    image: iot1,
-  },
-  {
-    title: "IT Channel Oxygen - Cloud Sentrics placed 6th in UK top 250",
-    bgColor: "bg-white text-purple-900",
-  },
-  {
-    title: "Cloud Sentrics Breaks £1 Billion Revenue Barrier",
-    bgColor: "bg-purple-900 text-white",
-  },
-  {
-    title: "Kore.ai and Cloud Sentrics to Deliver AI Solutions",
-    bgColor: "bg-blue-700 text-white",
-  },
-  {
-    title: "Building Stronger Futures with Cloud Sentrics, One Game at a Time",
-    bgColor: "bg-purple-900 text-white",
-  },
-  {
-    title: "Cloud Sentrics Announces Partnership With Starburst",
-    image: iot_data,
-  },
-  {
-    title: "Cloud Sentrics Partners With NICE To Be The Preferred Global Partner",
-    image: iot_solution,
-  },
-  {
-    title: "Portsmouth Cricket Club & Cloud Sentrics Team Up",
-    image: cloudchip,
-  },
-  {
-    title: "CRN Partner Acquisitions",
-    image: security,
-  },
-  {
-    title: "Cloud Sentrics Technologies 2024 Gold Partner Award",
-    image: data,
-  },
-  {
-    title: "E2E Tech 100",
-    bgColor: "bg-red-600 text-white",
+    description: "More Than Just Training: How Cloud Sentrics Delivers for Clients",
+    highlight: false,
+    content: `While Cloud Sentrics is celebrated for empowering individuals through training, the company’s impact extends far beyond classrooms. Cloud Sentrics also provides cloud consulting services for organizations seeking tailored solutions in Cloud Engineering, DevSecOps, and Security.
+
+From cloud migration and infrastructure automation to security audits and workforce training, Cloud Sentrics collaborates with enterprises to build scalable, secure, and cost-efficient cloud environments.
+
+What makes their approach unique? It’s the same value they bring to students—real-world expertise. Whether it's supporting a U.S.-based fintech firm with AWS security or helping a Nigerian startup move workloads to Azure, Cloud Sentrics delivers excellence with measurable impact.
+
+Businesses ready to future-proof their operations now have a trusted partner in Cloud Sentrics—where excellence meets execution.`,
   },
 ];
 
 
 const NewsArticles = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   const filteredArticles = allArticles.filter((article) =>
     article.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -120,8 +96,12 @@ const NewsArticles = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {filteredArticles
           .filter((item) => item.highlight)
-          .map((article, index) => (
-            <div key={index} className="relative overflow-hidden rounded-lg shadow-md">
+          .map((article) => (
+            <div
+              key={article.id}
+              onClick={() => setSelectedArticle(article)}
+              className="relative cursor-pointer overflow-hidden rounded-lg shadow-md"
+            >
               <img src={article.image} alt={article.title} className="w-full h-60 object-cover" />
               <div className="absolute bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
                 <h3 className="text-lg font-bold">{article.title}</h3>
@@ -135,25 +115,27 @@ const NewsArticles = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredArticles
           .filter((item) => !item.highlight)
-          .map((article, index) => (
+          .map((article) => (
             <div
-              key={index}
-              className={`rounded-lg overflow-hidden shadow-md ${
-                article.image ? "bg-white" : article.bgColor || "bg-gray-200 text-black"
-              }`}
+              key={article.id}
+              onClick={() => setSelectedArticle(article)}
+              className="rounded-lg overflow-hidden shadow-md cursor-pointer bg-white"
             >
-              {article.image && (
-                <img src={article.image} alt={article.title} className="w-full h-40 object-cover" />
-              )}
+              <img src={article.image} alt={article.title} className="w-full h-40 object-cover" />
               <div className="p-4 flex flex-col justify-between h-full">
                 <h4 className="text-base font-semibold mb-2">{article.title}</h4>
-                <a href={article.link || "#"} className="text-sm text-blue-300 hover:underline mt-auto">
+                <span className="text-sm text-blue-300 hover:underline mt-auto">
                   Read the article →
-                </a>
+                </span>
               </div>
             </div>
           ))}
       </div>
+
+      {/* Modal */}
+      {selectedArticle && (
+        <Modal article={selectedArticle} onClose={() => setSelectedArticle(null)} />
+      )}
     </section>
   );
 };
