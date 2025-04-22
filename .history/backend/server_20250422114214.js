@@ -101,23 +101,15 @@ app.post('/create-payment-intent', async (req, res) => {
             console.log('✅ Student info saved to DB');
 
             // 3. Send confirmation email
-            /* const transporter = nodemailer.createTransport({
+            const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASS,
                 },
-            }); */
-            
-            const transporter = nodemailer.createTransport({
-              host: 'smtp.hostinger.com',
-              port: 465,
-              secure: true, // true for 465, false for other ports
-              auth: {
-                user: process.env.EMAIL_USER, // Your email address
-                pass: process.env.EMAIL_PASS, // Your email password or app password
-              },
             });
+
+            
 
             const mailOptions = {
                 from: process.env.EMAIL_USER,

@@ -224,7 +224,7 @@ const ContactForm = () => {
                     <h4 className="text-lg font-semibold border-b pb-1 mb-2">Call Us</h4>
                     <p className="text-gray-700 mb-1">Have a question or need immediate assistance?</p>
                     <p className="font-medium text-gray-900">Phone: <a href="tel:+13465806298" className="text-blue-600">+13 4658 06298</a></p>
-                    <p className="text-sm text-gray-500 mt-1">Our team is available Monday – Friday, 9am to 5pm (CST).</p>
+                    <p className="text-sm text-gray-500 mt-1">Our team is available Monday – Friday, 9am to 5pm (T).</p>
                 </div>
 
                 {/* Press & Media */}

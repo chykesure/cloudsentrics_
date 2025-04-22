@@ -48,7 +48,7 @@ const CareerPage = () => {
 
                     <div>
                         <p className="font-semibold text-base md:text-lg text-gray-900">
-                            Mustapha Ibrahim Sunusi
+                        Mustapha Ibrahim Sunusi
                         </p>
                         <p className="text-sm md:text-base text-gray-600">Administrator</p>
                     </div>
@@ -57,17 +57,17 @@ const CareerPage = () => {
                 </motion.div>
 
                 <motion.div
-                    className="w-full h-80 md:h-[400px] rounded overflow-hidden shadow-lg"
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <img
-                        src={testimonialImg}
-                        alt="Mustapha Ibrahim Sunusi"
-                        className="w-full h-full object-contain rounded-lg"
-                    />
-                </motion.div>
+  className="w-full h-80 md:h-[400px] rounded overflow-hidden shadow-lg"
+  initial={{ opacity: 0, x: 30 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  <img
+    src={testimonialImg}
+    alt="Mustapha Ibrahim Sunusi"
+    className="w-full h-full object-contain rounded-lg"
+  />
+</motion.div>
 
             </section>
 

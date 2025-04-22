@@ -104,36 +104,36 @@ const LatestNews = () => {
 
       {/* Modal */}
       {selectedArticle && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4">
-          <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 rounded-lg shadow-xl relative">
-            {/* Close Button */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold z-10"
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
+  <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4">
+    <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 rounded-lg shadow-xl relative">
+      {/* Close Button */}
+      <button
+        onClick={handleCloseModal}
+        className="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold z-10"
+        aria-label="Close modal"
+      >
+        &times;
+      </button>
 
-            {/* Article Image */}
-            <img
-              src={selectedArticle.image}
-              alt={selectedArticle.title}
-              className="w-full h-60 object-cover rounded-md mb-4"
-            />
+      {/* Article Image */}
+      <img
+        src={selectedArticle.image}
+        alt={selectedArticle.title}
+        className="w-full h-60 object-cover rounded-md mb-4"
+      />
 
-            {/* Title */}
-            <h3 className="text-2xl font-bold text-[#1e4272] mb-4">
-              {selectedArticle.title}
-            </h3>
+      {/* Title */}
+      <h3 className="text-2xl font-bold text-[#1e4272] mb-4">
+        {selectedArticle.title}
+      </h3>
 
-            {/* Content */}
-            <p className="text-gray-800 whitespace-pre-line">
-              {selectedArticle.content}
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Content */}
+      <p className="text-gray-800 whitespace-pre-line">
+        {selectedArticle.content}
+      </p>
+    </div>
+  </div>
+)}
 
     </section>
   );

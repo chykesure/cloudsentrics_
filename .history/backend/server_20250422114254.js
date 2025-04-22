@@ -108,7 +108,6 @@ app.post('/create-payment-intent', async (req, res) => {
                     pass: process.env.EMAIL_PASS,
                 },
             }); */
-            
             const transporter = nodemailer.createTransport({
               host: 'smtp.hostinger.com',
               port: 465,
