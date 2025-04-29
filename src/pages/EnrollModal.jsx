@@ -104,6 +104,15 @@ const EnrollForm = ({ onClose }) => {
                 const data = await enrollResponse.json();
                 console.log('Enrollment data sent successfully:', data);
 
+                // ✅ Save the token to localStorage
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    console.log("Token saved to localStorage:", data.token);
+                } else {
+                    console.warn("No token received from backend.");
+                }
+
+
                 setIsSubmitting(false);
                 onClose(); // Close modal or form
             }

@@ -1,0 +1,26 @@
+.marquee-container {
+    overflow: hidden;  /* Hide the overflowing content */
+    width: 100%;
+    background-color: #fff;
+  }
+  
+  .marquee {
+    display: flex;
+    animation: marquee 30s linear infinite;  /* Slower, continuous marquee effect */
+  }
+  
+  .badge-item {
+    flex: 0 0 auto;  /* Prevent shrinking, ensure images stay their size */
+    margin-right: 20px;  /* Space between images */
+    text-align: center;
+  }
+  
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  

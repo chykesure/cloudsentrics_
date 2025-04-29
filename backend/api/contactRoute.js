@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 
 const router = express.Router();
 
-// ✅ Correct Hostinger SMTP transporter (use only this)
+// ✅ Hostinger SMTP Transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.hostinger.com',
   port: 465,
@@ -28,9 +28,10 @@ module.exports = () => {
       consent,
     } = req.body;
 
+    // Mail to CloudSentrics (you)
     const mailOptions = {
       from: `"CloudSentrics Contact Form" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // send to yourself
+      to: process.env.EMAIL_USER,
       subject: '📨 New Contact Form Submission',
       html: `
         <h2>New Contact Submission</h2>
@@ -45,17 +46,42 @@ module.exports = () => {
       `,
     };
 
+    // Confirmation Email to the User
+    const confirmationMail = {
+      from: `"CloudSentrics" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: `✅ Thank You for Contacting CloudSentrics`,
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; color: #333;">
+          <div style="text-align: center;">
+            <img src="https://cloudsentrics.org/assets/logo.jpg" alt="CloudSentrics Logo" style="width: 120px; margin-bottom: 20px;" />
+          </div>
+          <h2 style="color: #333;">Hi ${firstName},</h2>
+          <p style="font-size: 16px;">Thank you for reaching out to CloudSentrics.</p>
+          <p style="font-size: 16px;">We’ve received your message and will be in touch soon regarding your inquiry.</p>
+          <p style="font-size: 16px;">If you need immediate support, feel free to reply to this email.</p>
+          <hr style="margin: 30px 0;">
+          <p style="font-size: 12px; color: #999;">
+            This is an automated message from CloudSentrics.org.
+          </p>
+        </div>
+      `,
+    };
+
     try {
+      // Send both emails
       await transporter.sendMail(mailOptions);
+      await transporter.sendMail(confirmationMail);
+
       res.status(200).json({
         success: true,
-        message: 'Contact message sent successfully',
+        message: 'Contact message sent and confirmation email delivered',
       });
     } catch (error) {
-      console.error('❌ Error sending email:', error);
+      console.error('❌ Error sending contact or confirmation email:', error);
       res.status(500).json({
         success: false,
-        message: 'Failed to send contact message',
+        message: 'Failed to send contact or confirmation message',
         error: error.message,
       });
     }

@@ -1,0 +1,20 @@
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Moves only half, avoiding delays */
+  }
+  
+  .animate-scroll {
+    display: flex;
+    width: max-content;
+    animation: scroll 30s linear infinite; /* Increased speed */
+  }
+  
+  @keyframes fade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  .animate-fade {
+    animation: fade 1s ease-in-out;
+  }
+  

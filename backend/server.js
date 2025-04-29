@@ -3,43 +3,25 @@ dotenv.config(); // Load .env variables early
 
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
-const nodemailer = require('nodemailer');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware setup
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' })); // Use .env variable for origin
-app.use(express.json()); // For parsing application/json
-
-// MySQL connection setup
-const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'cloudsentrics',
-});
-
-// Check MySQL connection
-db.connect((err) => {
-    if (err) {
-        console.error('❌ MySQL connection failed:', err);
-        process.exit(1); // Exit if the DB connection fails
-    }
-    console.log('✅ Connected to MySQL database');
-});
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
+app.use(express.json());
 
 // Home route
 app.get('/', (req, res) => {
     res.send('✅ Backend server is running');
 });
 
-// Generate 6-digit token
+// Generate 6-digit token (optional if still needed)
 const generateToken = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Payment + Email + DB route
+// Payment Intent Route (without email)
 app.post('/create-payment-intent', async (req, res) => {
     try {
         const {
@@ -49,8 +31,7 @@ app.post('/create-payment-intent', async (req, res) => {
             phone,
             country,
             course,
-            paymentMethod, // Optional, if frontend is handling it
-            stripePaymentMethodId, // Optional from frontend
+            paymentMethod,
         } = req.body;
 
         if (!amount || !email || !fullName) {
@@ -62,10 +43,13 @@ app.post('/create-payment-intent', async (req, res) => {
             return res.status(400).json({ error: 'Invalid payment amount.' });
         }
 
-        const registrationToken = generateToken();
-        const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        // Generate JWT token (for metadata or future use)
+        const registrationToken = jwt.sign(
+            { email, fullName, course, createdAt: new Date().toISOString() },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: '15m' }
+        );
 
-        // 1. Create PaymentIntent with optional payment_method
         const paymentIntent = await stripe.paymentIntents.create({
             amount: parsedAmount,
             currency: 'usd',
@@ -83,62 +67,9 @@ app.post('/create-payment-intent', async (req, res) => {
 
         console.log('✅ PaymentIntent created:', paymentIntent.id);
 
-        // 2. Insert into database
-        const sql = `
-            INSERT INTO students (
-                full_name, email, phone, country, course,
-                payment_method, registration_token, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        const values = [fullName, email, phone, country, course, paymentMethod, registrationToken, createdAt];
-
-        db.query(sql, values, (err, result) => {
-            if (err) {
-                console.error('❌ Error inserting into DB:', err);
-                return res.status(500).json({ error: 'Failed to save student info' });
-            }
-
-            console.log('✅ Student info saved to DB');
-
-            // 3. Send confirmation email
-            /* const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS,
-                },
-            }); */
-            
-            const transporter = nodemailer.createTransport({
-              host: 'smtp.hostinger.com',
-              port: 465,
-              secure: true, // true for 465, false for other ports
-              auth: {
-                user: process.env.EMAIL_USER, // Your email address
-                pass: process.env.EMAIL_PASS, // Your email password or app password
-              },
-            });
-
-            const mailOptions = {
-                from: process.env.EMAIL_USER,
-                to: email,
-                subject: 'Payment Confirmation & Registration Token',
-                text: `Thank you for your payment. Your registration token is: ${registrationToken}`,
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.warn('⚠️ Email failed to send:', error);
-                } else {
-                    console.log('✅ Email sent:', info.response);
-                }
-            });
-
-            // 4. Respond with client secret
-            res.send({
-                clientSecret: paymentIntent.client_secret,
-                message: 'Payment successful, student info saved, and email sent.',
-            });
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+            message: 'Payment successful.',
         });
     } catch (error) {
         console.error('❌ Error in payment intent:', error);
@@ -147,40 +78,33 @@ app.post('/create-payment-intent', async (req, res) => {
 });
 
 
-// Enroll route (modular)
-const enrollRoute = require('./api/enroll')(db, generateToken);
+// Modular routes
+const enrollRoute = require('./api/enroll');
 app.use('/api/enroll', enrollRoute);
 
-// Token verification (optional/testing)
-const verifyTokenRoute = require('./api/verifytoken');
-app.use('/api', verifyTokenRoute(db));
-
-// ✅ Import the payment routes
 const paymentRoutes = require('./api/paymentRoutes');
-// Inject db into each request in the router
-app.use('/api', (req, res, next) => {
-    req.db = db; // attach db to the request
-    next();
-}, paymentRoutes);
+app.use('/api', paymentRoutes);
 
-// Contact form route
+const verifyToken = require('./api/verifytoken');
+app.post('/api/verifytoken', verifyToken, (req, res) => {
+    res.json({ valid: true, user: req.user });
+});
+
 const contactRoute = require('./api/contactRoute');
 app.use('/api', contactRoute());
 
-// Career form route
-const careerRoute = require('./api/careerRoute'); // adjust path accordingly
+const joinRoute = require('./api/joinRoute');
+app.use('/api', joinRoute); // Correct usage
+
+
+const careerRoute = require('./api/careerRoute');
 app.use('/api', careerRoute);
 
-
-// enquiry form route
-const enquiryRoute = require('./api/enquiryRoute'); // adjust path accordingly
+const enquiryRoute = require('./api/enquiryRoute');
 app.use('/api', enquiryRoute);
 
-// get in touch form route
-const getintouchRoute = require('./api/getintouchRoute'); // adjust path accordingly
+const getintouchRoute = require('./api/getintouchRoute');
 app.use('/api', getintouchRoute);
-
-
 
 // Start server
 app.listen(PORT, () => {

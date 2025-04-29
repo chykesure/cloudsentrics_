@@ -1,42 +1,32 @@
-const express = require('express');
-const router = express.Router();
+const jwt = require('jsonwebtoken');
 
-module.exports = (db) => {
-  // Define the POST route for verifying the token
-  router.post('/verifytoken', (req, res) => {
-    const { token, email } = req.body;  // Extract token and email from request body
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Get the token from the Authorization header
 
-    // Check if both token and email are provided in the request body
-    if (!token || !email) {
-      return res.status(400).json({ error: 'Token and email are required' });
+    if (!token) {
+        console.log('Token missing in header');
+        return res.status(403).json({ error: 'Token is required' });
     }
 
-    // Query the database to get the registration_token for the provided email
-    const sql = 'SELECT registration_token FROM students WHERE email = ?';
-    db.query(sql, [email], (err, result) => {
-      if (err) {
-        // Handle any database query errors
-        console.error('❌ Error querying the database:', err);
-        return res.status(500).json({ error: 'Failed to verify token', details: err.message });
-      }
+    console.log("Token received: ", token);  // Log the token received
 
-      if (result.length === 0) {
-        // If no user with the given email exists in the database
-        return res.status(404).json({ error: 'User not found' });
-      }
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        if (err) {
+            // Explicit error handling for token expiration and invalid token
+            if (err.name === 'TokenExpiredError') {
+                console.error("Token expired error:", err);
+                return res.status(401).json({ error: 'Token expired', details: err.message });
+            } else {
+                console.error("Token verification error:", err);
+                return res.status(401).json({ error: 'Invalid or expired token', details: err.message });
+            }
+        }
 
-      // Retrieve the stored registration token from the query result
-      const storedToken = result[0].registration_token;  // This is the token in the database for the user
-
-      console.log('🔐 Comparing tokens:', { inputToken: token, storedToken });
-
-      // Compare the provided token with the stored token
-      const isValid = String(token).trim() === String(storedToken).trim();  // Ensure both are strings and trim spaces
-
-      // Send response with verification result
-      res.status(200).json({ valid: isValid });
+        console.log("Decoded token:", decoded);  // Log the decoded token for debugging
+        req.user = decoded; // Attach the decoded user information to the request
+        next();  // Proceed to the next middleware
     });
-  });
-
-  return router;
 };
+
+module.exports = verifyToken;

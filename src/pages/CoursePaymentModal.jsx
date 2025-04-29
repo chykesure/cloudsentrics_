@@ -62,12 +62,48 @@ const CourseForm = ({ onClose }) => {
             return;
         }
 
+        const authToken = localStorage.getItem('token');
+        if (!authToken) {
+            Swal.fire({
+                icon: 'error',
+                title: 'No Auth Token',
+                text: '❌ No authorization token found. Please log in again.',
+            });
+            return;
+        }
+
+        // Decode and check expiration
+        try {
+            const decoded = jwtDecode(authToken);
+            const currentTime = Math.floor(Date.now() / 1000);
+            if (decoded.exp < currentTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Token Expired',
+                    text: '❌ Your session has expired. Please log in again.',
+                });
+                localStorage.removeItem('token'); // clear expired token
+                return;
+            }
+        } catch (decodeErr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Token',
+                text: '❌ Invalid token format. Please log in again.',
+            });
+            localStorage.removeItem('token');
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch('http://localhost:5000/api/verifytoken', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, token }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({ email })
             });
 
             const data = await res.json();
@@ -75,8 +111,8 @@ const CourseForm = ({ onClose }) => {
             if (!res.ok) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Server Error',
-                    text: data.error || 'Unknown error occurred',
+                    title: 'Verification Failed',
+                    text: data.error || '❌ Invalid or expired token.',
                 });
             } else if (data.valid) {
                 Swal.fire({
@@ -84,7 +120,6 @@ const CourseForm = ({ onClose }) => {
                     title: 'Token Verified',
                     text: '✅ Token verified successfully!',
                 });
-                setStep(1);
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -93,7 +128,6 @@ const CourseForm = ({ onClose }) => {
                 });
             }
         } catch (err) {
-            console.error('❌ Fetch failed:', err);
             Swal.fire({
                 icon: 'error',
                 title: 'Network Error',
@@ -103,6 +137,7 @@ const CourseForm = ({ onClose }) => {
             setLoading(false);
         }
     };
+
 
 
     const handleSubmitStep1 = () => setStep(2);
@@ -165,26 +200,7 @@ const CourseForm = ({ onClose }) => {
                     confirmButtonColor: '#00cc00',
                 });
 
-                // Save to DB
-                const saveRes = await fetch('http://localhost:5000/api/save-enrollment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ...formData,
-                        amount:
-                            formData.paymentMethod === 'one-time'
-                                ? coursePricing
-                                : formData.amount,
-                        paymentIntentId: result.paymentIntent.id,
-                        paymentStatus: result.paymentIntent.status,
-                    }),
-                });
-
-                if (!saveRes.ok) {
-                    const saveErrorText = await saveRes.text();
-                    throw new Error(`Failed to save enrollment: ${saveRes.status} - ${saveErrorText}`);
-                }
-
+                // ✅ Removed database save call
                 setStep(4); // Go to confirmation screen
             }
         } catch (err) {
@@ -198,7 +214,6 @@ const CourseForm = ({ onClose }) => {
             setIsSubmitting(false);
         }
     };
-
 
 
     const isAmountValid = () => {
@@ -242,7 +257,7 @@ const CourseForm = ({ onClose }) => {
                     </button>
                 )}
 
-                {step === 0 && (
+                {/* {step === 0 && (
                     <>
                         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
                             Enter Your Token
@@ -281,9 +296,9 @@ const CourseForm = ({ onClose }) => {
                             Verify Token
                         </button>
                     </>
-                )}
+                )} */}
 
-                {step === 1 && (
+                {step === 0 && (
                     <>
                         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
                             Step 1: Personal Details
@@ -350,7 +365,6 @@ const CourseForm = ({ onClose }) => {
                     </>
                 )}
 
-
                 {step === 2 && (
                     <>
                         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
@@ -410,9 +424,6 @@ const CourseForm = ({ onClose }) => {
                                 You will be charged <strong>USD 3000.00</strong>
                             </p>
                         )}
-
-
-
                         <button
                             className="w-full bg-[#1e4272] text-white py-3 rounded-md hover:bg-blue-700"
                             onClick={handleSubmitStep2}
@@ -438,7 +449,6 @@ const CourseForm = ({ onClose }) => {
                                 })()}
                             </div>
                         )}
-
                     </>
                 )}
 
@@ -462,10 +472,8 @@ const CourseForm = ({ onClose }) => {
                         >
                             {isSubmitting ? 'Processing...' : 'Submit Payment'}
                         </button>
-
                     </form>
                 )}
-
 
                 {step === 4 && (
                     <div className="text-center">
@@ -483,8 +491,8 @@ const CourseForm = ({ onClose }) => {
                         </button>
                     </div>
                 )}
-
             </div>
+
         </div>
     );
 };

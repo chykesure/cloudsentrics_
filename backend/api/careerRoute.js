@@ -33,6 +33,7 @@ router.post('/career', upload.single('file'), async (req, res) => {
     },
   });
 
+  // 📥 Mail to CloudSentrics with CV attachment
   const mailOptions = {
     from: `"Career Application" <${process.env.EMAIL_USER}>`,
     to: process.env.EMAIL_USER,
@@ -56,19 +57,41 @@ router.post('/career', upload.single('file'), async (req, res) => {
     ] : [],
   };
 
+  // 📬 Confirmation email to applicant (no attachment)
+  const confirmationMail = {
+    from: `"CloudSentrics Careers" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: '✅ Your Application Has Been Received',
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; color: #333;">
+        <div style="text-align: center;">
+          <img src="https://cloudsentrics.org/assets/logo.jpg" alt="CloudSentrics Logo" style="width: 120px; margin-bottom: 20px;" />
+        </div>
+        <h2 style="color: #333;">Hi ${firstName},</h2>
+        <p style="font-size: 16px;">Thanks for applying to CloudSentrics. We've received your career form and CV.</p>
+        <p style="font-size: 16px;">Our team will review your application and get in touch if there's a fit.</p>
+        <p style="font-size: 16px;">If you have any urgent questions, feel free to reply to this email.</p>
+        <hr style="margin: 30px 0;">
+        <p style="font-size: 12px; color: #999;">
+          This is an automated message from CloudSentrics.org Careers.
+        </p>
+      </div>
+    `,
+  };
+
   try {
     await transporter.sendMail(mailOptions);
+    await transporter.sendMail(confirmationMail);
 
-    // Delete file after sending
     if (cvFile) {
       fs.unlink(cvFile.path, (err) => {
         if (err) console.error('Error deleting file:', err);
       });
     }
 
-    res.status(200).json({ success: true, message: 'Career form submitted!' });
+    res.status(200).json({ success: true, message: 'Career form submitted and confirmation sent!' });
   } catch (error) {
-    console.error('❌ Error sending email:', error);
+    console.error('❌ Error sending career form or confirmation:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });

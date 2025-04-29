@@ -36,7 +36,7 @@ const FloatsButtons = () => {
         try {
             console.log('Sending data:', data); // Log the data to ensure it's being sent
 
-            const response = await fetch('http://localhost:5000/api/enquiry', {
+            const response = await fetch('https://api.cloudsentrics.org/api/enquiry', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const FloatsButtons = () => {
                             Your registration is successfully submitted, our team will review your information and contact you with the next steps, including payment instructions and course access details.
                         </p>
                         <p>
-                            Need support? Email us at <a href="mailto:info@cloudsentrics.com" className="underline">info@cloudsentrics.com</a> or WhatsApp <a href="https://wa.me/13463998985" className="underline">+1 (346) 399-8985</a>
+                            Need support? Email us at <a href="mailto:info@cloudsentrics.org" className="underline">info@cloudsentrics.com</a> or WhatsApp <a href="https://wa.me/13463998985" className="underline">+1 (346) 399-8985</a>
                         </p>
                         <p className="italic text-gray-400">Thank you for choosing Cloud Sentrics — your pathway to a secure and successful future in cloud technology!</p>
                     </div>
@@ -88,17 +88,38 @@ const FloatsButtons = () => {
                 <FaWhatsapp size={28} />
             </motion.a>
 
-            {/* Enquiry Button */}
-            <motion.button
-                onClick={toggleModal}
-                className="fixed bottom-[84px] right-6 bg-yellow-500 mb-12 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50"
-                title="Make an Enquiry"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                whileHover={{ scale: 1.2 }}
-            >
-                <FaQuestionCircle size={28} />
-            </motion.button>
+            <div className="fixed bottom-[84px] right-9 mb-12 z-50">
+                {/* SVG Curved Text */}
+                <svg width="120" height="120" className="absolute left-[-28px] top-[-28px] pointer-events-none">
+                    <defs>
+                        <path
+                            id="curve"
+                            d="M 60,60 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0"
+                            fill="none"
+                        />
+                    </defs>
+                    <text fontSize="16" fontWeight="bold" fill="yellow">
+                        <textPath href="#curve" startOffset="0%">
+                            ENQUIRY • ENQUIRY 
+                        </textPath>
+                    </text>
+                </svg>
+
+                {/* Enquiry Button */}
+                <motion.button
+                    onClick={toggleModal}
+                    className="bg-yellow-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center"
+                    title="Make an Enquiry"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    whileHover={{ scale: 1.2 }}
+                >
+                    <FaQuestionCircle size={28} />
+                </motion.button>
+            </div>
+
+
+
 
             {/* Back to Top */}
             <motion.button
@@ -123,7 +144,7 @@ const FloatsButtons = () => {
                             ✕
                         </button>
 
-                        <h2 className="text-2xl font-bold mb-2 text-red-500">
+                        <h2 className="text-2xl font-bold mb-2 text-white-500">
                             Start Your Cloud Journey with Cloud Sentrics
                         </h2>
 
@@ -187,7 +208,7 @@ const FloatsButtons = () => {
                                     <button
                                         type="submit"
                                         disabled={isLoading}
-                                        className="mt-4 bg-red-500 text-white w-full p-2 rounded-lg"
+                                        className="mt-4 bg-gray-500 text-white w-full p-2 rounded-lg"
                                     >
                                         {isSubmitting ? "Submitting..." : "Submit Your Inquiry"}
                                     </button>

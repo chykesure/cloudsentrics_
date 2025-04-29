@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const testimonials = [
     {
-        "quote": "The DTS support staff is always there – we always get a ‘live’, competent and quality tech to assist us. They are true general DASD experts – they frequently provide DASD-related assistance beyond the scope of their products.",
+        "quote": "The Cloud Sentrics consulting team consistently delivers exceptional support. We always connect with a live,knowledgeable expert who goes beyond expectations—offering insights that extend well past the immediate project scope. Their expertise in cloud migration and DevSecOps has been invaluable to our team.",
         "name": "Dave Cebell",
         "title": "The Dallas Morning News"
     },
     {
-        "quote": "The service we have received from DTS Software, today, has been above and beyond any expectations we could have had for a vendor. From the materials provided this morning, to the conference call, to the FAX – and the many, e-mails in between – thank you all so much for setting the standard.",
+        "quote": "Working with Cloud Sentrics has been a game-changer. From the detailed project documentation to real-time collaboration and proactive communication, their service has far surpassed what we typically expect from a technology partner. They’ve set a new benchmark in cloud service delivery.",
         "name": "Rick Hodges",
         "title": "Project Manager, Texas Health"
     },

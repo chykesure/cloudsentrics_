@@ -104,7 +104,7 @@ const TestimonialSlider = () => {
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-8">
             <h2 className="text-3xl md:text-5xl font-bold text-center text-gray-900 mb-6 md:mb-12">
-                Students Review
+                
             </h2>
 
             {/* Swiper Slider */}

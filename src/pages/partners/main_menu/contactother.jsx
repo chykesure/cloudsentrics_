@@ -13,7 +13,7 @@ const ContactForm = () => {
         message: "",
         consent: false,
     });
-    
+
 
     const [isProcessing, setIsProcessing] = useState(false);
     const formRef = useRef(null);
@@ -50,7 +50,7 @@ const ContactForm = () => {
         setIsProcessing(true);
 
         try {
-            const response = await fetch("http://localhost:5000/api/contact", {
+            const response = await fetch("https://api.cloudsentrics.org/api/contact", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -223,7 +223,7 @@ const ContactForm = () => {
                 <div className="bg-white shadow rounded p-4">
                     <h4 className="text-lg font-semibold border-b pb-1 mb-2">Call Us</h4>
                     <p className="text-gray-700 mb-1">Have a question or need immediate assistance?</p>
-                    <p className="font-medium text-gray-900">Phone: <a href="tel:+13465806298" className="text-blue-600">+13 4658 06298</a></p>
+                    <p className="font-medium text-gray-900">Phone: <a href="tel:+13465806298" className="text-blue-600">+1 346-580-6298</a></p>
                     <p className="text-sm text-gray-500 mt-1">Our team is available Monday – Friday, 9am to 5pm (CST).</p>
                 </div>
 
