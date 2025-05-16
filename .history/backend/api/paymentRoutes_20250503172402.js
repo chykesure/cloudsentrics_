@@ -1,0 +1,79 @@
+const express = require('express');
+const router = express.Router();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const nodemailer = require('nodemailer');
+
+// Setup Hostinger mail transporter
+const transporter = nodemailer.createTransport({
+  host: 'smtp.hostinger.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Create PaymentIntent + send confirmation email
+router.post('/create-payment-intent', async (req, res) => {
+  const { amount, email, course } = req.body;
+
+  try {
+    if (!amount || !email) {
+      return res.status(400).json({ error: 'Amount and email are required.' });
+    }
+
+    const parsedAmount = parseInt(amount, 10);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount provided.' });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: parsedAmount,
+      currency: 'usd',
+      receipt_email: email,
+      description: `Course Enrollment Payment: ${course || 'N/A'}`,
+    });
+
+
+    res.send({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('❌ Stripe Error:', error);
+
+    // Stripe-specific errors
+    if (error.type === 'StripeCardError') {
+      let message = 'Your card was declined.';
+
+      if (error.decline_code === 'insufficient_funds') {
+        message = 'Transaction declined: Insufficient funds on your card.';
+      } else if (error.decline_code === 'expired_card') {
+        message = 'Transaction declined: Your card has expired.';
+      } else if (error.decline_code === 'incorrect_cvc') {
+        message = 'Transaction declined: Incorrect CVC code.';
+      } else if (error.decline_code === 'incorrect_number') {
+        message = 'Transaction declined: Incorrect card number.';
+      }
+
+      return res.status(400).json({ error: message });
+    }
+
+    if (error.type === 'StripeInvalidRequestError') {
+      return res.status(400).json({
+        error: 'Invalid parameters sent to Stripe. Please check your data.',
+      });
+    }
+
+    if (error.type === 'StripeAPIError') {
+      return res.status(500).json({
+        error: 'Stripe internal error. Please try again later.',
+      });
+    }
+
+    // Catch-all error handler
+    return res.status(500).json({
+      error: 'An unexpected error occurred. Please try again later.',
+    });
+  }
+});
+
+module.exports = router;
