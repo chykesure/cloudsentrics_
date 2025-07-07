@@ -8,7 +8,6 @@ const cloud = "/assets/cld.jpg";
 const iot = "/assets/iot.jpg";
 const workplace = "/assets/workplace.jpg";
 const technology = "/assets/technology.jpg";
-const saas = "/assets/saas.jpg";
 
 const services = [
     {
@@ -39,7 +38,7 @@ const services = [
     {
         title: "torage as a Service (STaaS)",
         description: "On-demand cloud storage with enterprise grade security, scalability, and pay-as-you-go flexibility.",
-        image: saas,
+        image: technology,
     },
 ];
 

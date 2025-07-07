@@ -28,7 +28,7 @@ He is passionate about leveraging technology to drive innovation, streamline ope
   {
     name: "Emmanuel Odo",
     role: "Cloud Sales Engineer",
-    image: "/assets/sales.jpg",
+    image: "/assets/admin.jpg",
     content: `Emmanuel Odo serves as a Cloud Sales Engineer at Cloud Sentrics, where he bridges the gap between technical solutions and customer needs. With a strong background in cloud infrastructure and client engagement, Emmanuel works closely with businesses to identify their challenges and match them with scalable, secure, and cost-effective cloud solutions.
 
 His role combines deep technical insight with strategic sales expertise ensuring that every prospect understands the value Cloud Sentrics brings. Emmanuel is passionate about helping organizations adopt cloud technologies that drive transformation and long-term success.

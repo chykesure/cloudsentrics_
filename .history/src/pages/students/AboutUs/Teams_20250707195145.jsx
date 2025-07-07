@@ -27,13 +27,13 @@ He is passionate about leveraging technology to drive innovation, streamline ope
   },
   {
     name: "Emmanuel Odo",
-    role: "Cloud Sales Engineer",
-    image: "/assets/sales.jpg",
-    content: `Emmanuel Odo serves as a Cloud Sales Engineer at Cloud Sentrics, where he bridges the gap between technical solutions and customer needs. With a strong background in cloud infrastructure and client engagement, Emmanuel works closely with businesses to identify their challenges and match them with scalable, secure, and cost-effective cloud solutions.
+    role: "Administrator",
+    image: "/assets/admin.jpg",
+    content: `
+Mustapha Ibrahim Sunusi serves as a Cloud Administrator at Cloud Sentrics, where he oversees the management, optimization, and security of our cloud environments. With deep expertise in cloud platforms and DevSecOps practices, Mustapha ensures that both our clients and trainees experience seamless, scalable, and secure cloud solutions.
 
-His role combines deep technical insight with strategic sales expertise ensuring that every prospect understands the value Cloud Sentrics brings. Emmanuel is passionate about helping organizations adopt cloud technologies that drive transformation and long-term success.
-
-As part of the Cloud Sentrics team, he plays a vital role in our mission to empower both individuals and enterprises with future-ready cloud capabilities.`
+He is passionate about leveraging technology to drive innovation, streamline operations, and empower growth. As part of the Cloud Sentrics team, Mustapha is dedicated to delivering excellence and supporting our mission to help individuals and businesses thrive in the cloud.
+    `
   }
 ];
 

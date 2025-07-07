@@ -39,7 +39,7 @@ const services = [
     {
         title: "torage as a Service (STaaS)",
         description: "On-demand cloud storage with enterprise grade security, scalability, and pay-as-you-go flexibility.",
-        image: saas,
+        image: technology,
     },
 ];
 

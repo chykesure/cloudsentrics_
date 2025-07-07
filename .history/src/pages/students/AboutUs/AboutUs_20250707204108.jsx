@@ -1,7 +1,7 @@
 import Headers from "../../students/Header"; // Ensure Header is included
 import { AiOutlineCloud, AiOutlineUser, AiOutlineTeam, AiOutlineTrophy } from "react-icons/ai";
 import { color, motion } from "framer-motion";
-import { FaCloud, FaServer, FaPython, FaUserShield, FaDocker, FaLock, FaNetworkWired, FaRocket, FaWhatsapp } from "react-icons/fa";
+import { FaCloud, FaServer, FaPython, FaUserShield, FaDollarSign, FaDocker, FaLock, FaNetworkWired, FaRocket, FaWhatsapp } from "react-icons/fa";
 import FooterPage from "../../Footer";
 import React, { useState, useRef } from 'react';
 import Teams from "./Teams";
@@ -17,6 +17,7 @@ const JoinImg = "/assets/people2.jpg";
 const facultyMembers = [
     { name: "OLUWADAMILARE ODO", title: "Senior Cloud Security Engineer/Instructor", icon: <FaCloud size={50} className="text-white-500" /> },
     { name: "Mustapha Ibrahim Sunusi", title: "Administrator", icon: <FaServer size={50} className="text-white-500" /> },
+    { name: "Emmanuel Odo", title: "Cloud Sales Engineer", icon: <FaDollarSign  size={50} className="text-white-500" /> },
     /* { name: "TOSIN ADEDOGUN", title: "Python and Linux Instructor", icon: <FaPython size={50} className="text-white-500" /> },
     { name: "OMOLARA ADISA", title: "IAM Instructor", icon: <FaLock size={50} className="text-white-500" /> },
     { name: "IJEOMA ATUCHUKWU", title: "Security Instructor", icon: <FaUserShield size={50} className="text-white-500" /> },

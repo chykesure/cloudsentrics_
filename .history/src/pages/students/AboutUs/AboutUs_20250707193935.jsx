@@ -17,6 +17,7 @@ const JoinImg = "/assets/people2.jpg";
 const facultyMembers = [
     { name: "OLUWADAMILARE ODO", title: "Senior Cloud Security Engineer/Instructor", icon: <FaCloud size={50} className="text-white-500" /> },
     { name: "Mustapha Ibrahim Sunusi", title: "Administrator", icon: <FaServer size={50} className="text-white-500" /> },
+    { name: "Emmanuel Odo", title: "Cloud Sales Engineer", icon: <FaServer size={50} className="text-white-500" /> },
     /* { name: "TOSIN ADEDOGUN", title: "Python and Linux Instructor", icon: <FaPython size={50} className="text-white-500" /> },
     { name: "OMOLARA ADISA", title: "IAM Instructor", icon: <FaLock size={50} className="text-white-500" /> },
     { name: "IJEOMA ATUCHUKWU", title: "Security Instructor", icon: <FaUserShield size={50} className="text-white-500" /> },
