@@ -22,7 +22,6 @@ import AboutCloud from "./pages/partners/main_menu/aboutus";
 import Careers from "./pages/partners/main_menu/careers";
 import ContactUs from "./pages/partners/main_menu/contact";
 import ScrollToTop from "./pages/ScrollToTop"; // <- Add this line
-import More from "./pages/students/AboutUs/More";
 
 function App() {
   return (
@@ -39,7 +38,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/StudentPage" element={<StudentPage />} />
             <Route path="/AboutUs" element={<AboutUs />} />
-            <Route path="/More" element={<More />} />
+            <Route path="/AboutUs" element={<Mor />} />
             <Route path="/courses/AWS" element={<AWS />} />
             <Route path="/courses/Azure" element={<AZURE />} />
             <Route path="/courses/DevSecOps" element={<DevSecOps />} />

@@ -30,7 +30,7 @@ const Header = () => {
 
     const menuItems = [
         { label: "Home", path: "/StudentPage" },
-        { label: "About Us", path: "/More" },
+        { label: "About Us", path: "/" },
         {
             label: "Courses",
             options: [

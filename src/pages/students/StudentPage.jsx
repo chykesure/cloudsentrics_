@@ -10,6 +10,8 @@ import Join from "./Join";
 import FooterPage from "../Footer";
 import EnrollModal from "../EnrollModal";
 import AwsCertification from "./certificate/Aws";
+import { AiOutlineCloud, AiOutlineUser, AiOutlineTeam, AiOutlineTrophy } from "react-icons/ai";
+
 
 
 const consultingImage = "/assets/sentrics3.jpg";
@@ -48,7 +50,7 @@ const StudentPage = () => {
                         Learn industry-relevant Cloud & DevSecOps skills from scratch and secure high-paying opportunities in tech.
                         Whether you're a beginner or an IT professional looking to upskill, our program is tailored to guide you step by step.
                     </p>
-                    
+
                     {/* Enroll Button */}
                     <button
                         onClick={handleOpenModal}
@@ -87,7 +89,7 @@ const StudentPage = () => {
             <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-16 bg-gray-100">
                 <AwsCertification />
             </section>
-            
+
             {/* Testimonials Section */}
             <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-16 bg-gray-100">
                 <TestimonialSlider />
@@ -106,6 +108,74 @@ const StudentPage = () => {
             {/* Testimonial Page Section */}
             <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-16 bg-gray-100">
                 <TestimonialPage />
+            </section>
+
+            <section className="bg-[#1e4272] text-white mt-10 py-16 px-6 sm:py-10 sm:px-4 lg:px-20">
+                <h2 className="text-4xl sm:text-5xl font-bold text-center">How we get you to competence</h2>
+
+                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Card 1 */}
+                    <motion.div
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                        className="bg-[#1e4272] bg-opacity-50 p-8 rounded-lg text-center sm:text-left hover:bg-opacity-80 transition-all duration-300 cursor-pointer"
+                    >
+                        <div className="bg-yellow-500 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto sm:mx-0 mb-4">
+                            <AiOutlineCloud className="text-3xl text-black" />
+                        </div>
+                        <h3 className="text-2xl font-bold">100% Practical Courses</h3>
+                        <p className="mt-3 text-lg">
+                            With 100% practical, you'll start building on the Cloud from day one.
+                        </p>
+                    </motion.div>
+
+                    {/* Card 2 */}
+                    <motion.div
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                        className="bg-[#1e4272] bg-opacity-50 p-8 rounded-lg text-center sm:text-left hover:bg-opacity-80 transition-all duration-300 cursor-pointer"
+                    >
+                        <div className="bg-yellow-500 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto sm:mx-0 mb-4">
+                            <AiOutlineUser className="text-3xl text-black" />
+                        </div>
+                        <h3 className="text-2xl font-bold">Live Instructor Guidance</h3>
+                        <p className="mt-3 text-lg">
+                            Our facilitators will work with you as you build and our workbooks take you step by step in each process.
+                        </p>
+                    </motion.div>
+
+                    {/* Card 3 */}
+                    <motion.div
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                        className="bg-[#1e4272] bg-opacity-50 p-8 rounded-lg text-center sm:text-left hover:bg-opacity-80 transition-all duration-300 cursor-pointer"
+                    >
+                        <div className="bg-yellow-500 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto sm:mx-0 mb-4">
+                            <AiOutlineTeam className="text-3xl text-black" />
+                        </div>
+                        <h3 className="text-2xl font-bold">Group-focused</h3>
+                        <p className="mt-3 text-lg">
+                            Group learning helps better assimilation, fostering collaboration with colleagues through breakout rooms and class labs.
+                        </p>
+                    </motion.div>
+
+                    {/* Card 4 */}
+                    <motion.div
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                        className="bg-[#1e4272] bg-opacity-50 p-8 rounded-lg text-center sm:text-left hover:bg-opacity-80 transition-all duration-300 cursor-pointer"
+                    >
+                        <div className="bg-yellow-500 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto sm:mx-0 mb-4">
+                            <AiOutlineTrophy className="text-3xl text-black" />
+                        </div>
+
+                        <h3 className="text-2xl font-bold">Post Training Support</h3>
+                        <p className="mt-3 text-lg">
+                            After your program, we'll provide you with mock interviews, CV & LinkedIn reviews, and job postings.
+                        </p>
+                    </motion.div>
+
+                </div>
             </section>
 
             {/* Join Message Section */}

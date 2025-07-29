@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import Footer from "../home/Footer";
 import CareerForm from "./careerform";
 import CareerPage from "./otherscareer";
-import Header from "../../../pages/Header";
+import Header from "../";
 
 const logo = "/assets/logo.jpg";
 const cv = "/assets/cv.jpg";

@@ -1,4 +1,4 @@
-import Headers from "../../../pages/Header"; // Ensure Header is included
+import Headers from "../../../pages/"; // Ensure Header is included
 import { AiOutlineCloud, AiOutlineUser, AiOutlineTeam, AiOutlineTrophy } from "react-icons/ai";
 import { color, motion } from "framer-motion";
 import { FaCloud, FaChartLine, FaServer, FaPython, FaUserShield, FaDocker, FaLock, FaNetworkWired, FaRocket, FaWhatsapp } from "react-icons/fa";
@@ -47,7 +47,7 @@ const countries = [
     "Vietnam", "Yemen", "Zambia", "Zimbabwe"
 ];
 
-const AboutUs = () => {
+const More = () => {
 
     const settings = {
         dots: false,
@@ -419,4 +419,4 @@ const AboutUs = () => {
     );
 };
 
-export default AboutUs;
+export default More;

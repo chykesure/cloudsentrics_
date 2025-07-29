@@ -39,7 +39,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/StudentPage" element={<StudentPage />} />
             <Route path="/AboutUs" element={<AboutUs />} />
-            <Route path="/More" element={<More />} />
+            <Route path="/AboutUs" element={<More />} />
             <Route path="/courses/AWS" element={<AWS />} />
             <Route path="/courses/Azure" element={<AZURE />} />
             <Route path="/courses/DevSecOps" element={<DevSecOps />} />
