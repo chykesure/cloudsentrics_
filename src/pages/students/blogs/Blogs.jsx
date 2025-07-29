@@ -97,10 +97,10 @@ const Blogs = () => {
                         Stay updated with expert opinions, industry trends, and valuable knowledge across various topics.
                         Our blog covers everything from technology to lifestyle, bringing fresh perspectives straight to you.
                     </p>
-                    <button className="mt-8 bg-[#1e4272] text-white px-10 py-5 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold 
+                    {/* <button className="mt-8 bg-[#1e4272] text-white px-10 py-5 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold 
 transition-all duration-300 transform hover:bg-[#18365a] hover:scale-105 shadow-lg animate-bounce">
                         Read Our Blogs
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
@@ -134,9 +134,9 @@ transition-all duration-300 transform hover:bg-[#18365a] hover:scale-105 shadow-
                                 </p>
                                 <h3 className="text-lg font-semibold text-gray-900 mt-2">{blog.title}</h3>
                                 <p className="mt-2 text-gray-600 line-clamp-2">{blog.content.substring(0, 60)}...</p>
-                                <a className="mt-4 text-blue-600 font-medium inline-flex items-center">
+                                {/* <a className="mt-4 text-blue-600 font-medium inline-flex items-center">
                                     Read more →
-                                </a>
+                                </a> */}
                             </motion.div>
                         ))}
                     </div>

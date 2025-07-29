@@ -55,7 +55,7 @@ const FloatsButtons = () => {
                             Your registration is successfully submitted, our team will review your information and contact you with the next steps, including payment instructions and course access details.
                         </p>
                         <p>
-                            Need support? Email us at <a href="mailto:info@cloudsentrics.org" className="underline">info@cloudsentrics.com</a> or WhatsApp <a href="https://wa.me/13463998985" className="underline">+1 (346) 399-8985</a>
+                            Need support? Email us at <a href="mailto:info@cloudsentrics.org" className="underline">info@cloudsentrics.org</a> or WhatsApp <a href="https://wa.me/13463998985" className="underline">+1 (346) 399-8985</a>
                         </p>
                         <p className="italic text-gray-400">Thank you for choosing Cloud Sentrics — your pathway to a secure and successful future in cloud technology!</p>
                     </div>
@@ -76,7 +76,7 @@ const FloatsButtons = () => {
         <>
             {/* WhatsApp Button */}
             <motion.a
-                href="https://wa.me/message/CGPT5WGTUAS3B1"
+                href="https://wa.me/message/OST2ZCU2IBHWI1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50"

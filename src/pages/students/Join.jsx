@@ -20,7 +20,7 @@ const Join = () => {
     try {
       console.log('Sending data:', data); // Log the data to ensure it's being sent
 
-      const response = await fetch("http://localhost:5000/api/join", {
+      const response = await fetch("https://api.cloudsentrics.org/api/join", {
         method: "POST",
         mode: "cors",
         headers: {

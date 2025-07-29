@@ -1,0 +1,162 @@
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Images
+const cloud_service = "/assets/cloud-service.jpg";
+const App_trans = "/assets/App_trans.jpg";
+const cloud_security = "/assets/cloud-security.jpg";
+
+const RelatedInfo = () => {
+  const [activeModal, setActiveModal] = useState(null);
+
+  const services = [
+    {
+      title: "Cloud",
+      description:
+        "Empower agility, speed, and growth. Leverage secure, scalable cloud solutions to modernize your business and accelerate transformation with Cloud Sentrics.",
+      image: cloud_service,
+      content: `Whether you're migrating to the public cloud or managing a hybrid environment, 
+Cloud Sentrics offers secure and scalable solutions tailored to your business needs. We 
+help organizations migrate their workloads to the cloud with a strong emphasis on 
+security, compliance, and performance ensuring a smooth transition with minimal risk.
+
+Our approach doesn't stop at migration; we implement best practices to help you stay 
+secure in the cloud with continuous monitoring, access controls, and threat detection 
+mechanisms.
+
+Understanding Cloud Models: We support all key cloud service models to meet your 
+business goals:
+• Infrastructure as a Service (IaaS): Provision scalable computing resources 
+such as virtual machines and storage on demand.
+• Platform as a Service (PaaS): Build, test, and deploy applications quickly using 
+cloud-hosted development environments.
+• Software as a Service (SaaS): Access software applications over the internet 
+without managing infrastructure or updates.
+
+Our Capabilities:
+• Cloud strategy and assessment
+• Infrastructure and app migration
+• Cost optimization and cloud governance
+• Multi-cloud and hybrid deployments
+
+Take full control of your digital transformation with a secure and agile cloud 
+foundation.`,
+    },
+    {
+      title: "Application Transformation",
+      description:
+        "Modernize for performance and innovation. Reengineer your applications to boost agility, enhance user experience, and stay ahead of the competition.",
+      image: App_trans,
+      content: `Legacy systems can slow down innovation. We help you reimagine, rehost, or refactor 
+applications to boost performance, reduce costs, and improve flexibility.
+
+How We Help:
+• Application assessment and modernization strategy
+• Microservices and containerization
+• API integrations
+• Cloud-native re-platforming
+
+Future-proof your applications and deliver better experiences to users.
+
+Security and compliance are integrated into every step of the transformation process 
+to ensure safe modernization.`,
+    },
+    {
+      title: "Security",
+      description:
+        "Safeguard your digital landscape. Detect threats early, protect critical assets, and ensure full security compliance across your operations.",
+      image: cloud_security,
+      content: `Our cybersecurity framework combines advanced threat detection, real-time response, 
+and compliance to safeguard your cloud and on-prem environments.
+
+Security Solutions Include:
+• Identity & access management
+• Network and endpoint protection
+• Threat hunting and incident response
+• Regulatory compliance and audits
+
+Build security into everything you do and stay resilient in the face of modern cyber 
+threats.`,
+    },
+  ];
+
+  return (
+    <section className="py-12 bg-gray-100">
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Services</h2>
+        <div className="w-16 h-1 bg-blue-600 mx-auto mb-8"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              className="relative bg-white rounded-lg shadow-lg overflow-hidden min-h-[400px] cursor-pointer"
+              whileHover={{ scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              onClick={() => setActiveModal(index)}
+            >
+              <img
+                src={service.image}
+                alt={service.title}
+                className="w-full h-64 md:h-80 object-cover"
+              />
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600">{service.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {activeModal !== null && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveModal(null)}
+          >
+            <motion.div
+              className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-0 shadow-lg text-left relative"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                className="absolute top-2 right-4 text-white z-10 bg-black/50 rounded-full px-3 py-1 text-xl"
+                onClick={() => setActiveModal(null)}
+              >
+                &times;
+              </button>
+
+              {/* Image */}
+              <img
+                src={services[activeModal].image}
+                alt={services[activeModal].title}
+                className="w-full h-64 md:h-80 object-cover rounded-t-xl"
+              />
+
+              {/* Content */}
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                  {services[activeModal].title}
+                </h3>
+                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                  {services[activeModal].content}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+};
+
+export default RelatedInfo;
