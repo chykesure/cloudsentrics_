@@ -64,7 +64,7 @@ function FooterPage() {
                             title: "Useful Links",
                             links: [
                                 { label: "Home", path: "/" },
-                                { label: "About Us", path: "/about" },
+                                { label: "About Us", path: "/Aboutus" },
                                 /* { label: "Blog", path: "/blog" }, */
                                 { label: "Events", path: "/events" }
                             ]

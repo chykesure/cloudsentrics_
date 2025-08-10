@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 import Footer from "../home/Footer";
 import CareerForm from "./careerform";
@@ -10,15 +9,18 @@ import Header from "../../../pages/Header";
 const logo = "/assets/logo.jpg";
 const cv = "/assets/cv.jpg";
 const role = "/assets/sentrics2.jpg";
+const no_vacancy = "/assets/vacancy.jpg";
 
 const Careers = () => {
     const careerFormRef = useRef(null);
+    const [showVacancyModal, setShowVacancyModal] = useState(false);
+
     const scrollToForm = () => {
         careerFormRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
-        <div className="bg-white text-gray-800">
+        <div className="bg-white text-gray-800 relative">
             {/* Header */}
             <Header />
 
@@ -57,12 +59,12 @@ const Careers = () => {
                         <p className="text-gray-600 text-base">
                             View all open vacancies and apply directly to join our growing team.
                         </p>
-                        <Link
-                            to="/available-roles"
+                        <button
+                            onClick={() => setShowVacancyModal(true)}
                             className="inline-flex items-center gap-2 px-5 py-3 bg-[#6b21a8] hover:bg-[#5b1a92] text-white rounded-full text-sm font-medium transition"
                         >
                             See Available Roles <FaArrowRight />
-                        </Link>
+                        </button>
                     </div>
                 </motion.div>
 
@@ -107,6 +109,48 @@ const Careers = () => {
                     <CareerForm />
                 </div>
             </section>
+
+            {/* Modal for No Vacancy */}
+            <AnimatePresence>
+                {showVacancyModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-transparent flex items-center justify-center"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, y: -30 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.8, y: 30 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 500,
+                                damping: 30
+                            }}
+                            className="relative bg-white rounded-2xl overflow-hidden max-w-xl w-full shadow-2xl"
+                        >
+                            <button
+                                onClick={() => setShowVacancyModal(false)}
+                                className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-lg font-bold z-10"
+                            >
+                                &times;
+                            </button>
+                            <motion.img
+                                src={no_vacancy}
+                                alt="No Vacancy"
+                                className="w-full h-auto object-cover"
+                                animate={{ scale: [1, 1.05, 1] }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                            />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Footer */}
             <Footer />

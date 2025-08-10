@@ -1,57 +1,101 @@
 import React from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowDown, FaArrowRight } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 const TechConsult = () => {
     return (
-        <section className="px-6 py-8 bg-gray-100 flex flex-col lg:flex-row gap-8 mt-[-60px]">
-            {/* Main Content */}
-            <div className="lg:w-2/3 bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold text-gray-900">Empowering Your Business with Cutting-Edge Technology Solutions</h2>
-                <p className="mt-4 font-semibold text-gray-700">
-                    At the heart of every successful digital transformation is the ability to leverage the right technology. We help you innovate with the latest infrastructure, streamline your operations, and align your technology with business goals. Whether you're modernizing your IT systems, deploying new platforms, or optimizing processes, our technology solutions deliver scalable and sustainable results.
+        <section className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50 flex flex-col lg:flex-row gap-10 mt-[-60px]">
+            {/* === Main Content === */}
+            <div className="lg:w-2/3 bg-white p-10 rounded-2xl shadow-xl">
+                <h2
+                    className="text-3xl font-bold text-gray-900 leading-tight mb-6"
+                    style={{ fontFamily: "'DM Serif Display', serif" }}
+                >
+                    Empowering Your Business with Cutting-Edge Technology Solutions
+                </h2>
+                <p className="text-gray-800 font-medium text-lg leading-relaxed">
+                    At the heart of every successful digital transformation is the ability to leverage the right technology.
+                    We help you innovate with the latest infrastructure, streamline your operations, and align your technology
+                    with business goals. Whether you're modernizing your IT systems, deploying new platforms, or optimizing processes,
+                    our technology solutions deliver scalable and sustainable results.
                 </p>
-                <p className="mt-4 text-gray-600">
-                    Our experts assess your current environment, recommend state-of-the-art technologies, and guide you through the implementation process. Whether you are enhancing your data center capabilities, adopting cloud solutions, or optimizing user experiences, we ensure that your infrastructure is primed for future growth and performance.
+                <p className="mt-5 text-gray-600 text-base leading-relaxed">
+                    Our experts assess your current environment, recommend state-of-the-art technologies, and guide you through
+                    the implementation process. Whether you are enhancing your data center capabilities, adopting cloud solutions,
+                    or optimizing user experiences, we ensure that your infrastructure is primed for future growth and performance.
                 </p>
-                <p className="mt-4 text-gray-600">
-                    We integrate advanced technologies like AI, cloud computing, and machine learning to drive innovation. Through continuous optimization, we help you make smarter decisions, improve operational efficiency, and stay ahead of market trends.
+                <p className="mt-5 text-gray-600 text-base leading-relaxed">
+                    We integrate advanced technologies like AI, cloud computing, and machine learning to drive innovation.
+                    Through continuous optimization, we help you make smarter decisions, improve operational efficiency, and
+                    stay ahead of market trends.
                 </p>
-                <p className="mt-4 text-gray-600">
-                    Security is built into every solution from safeguarding your network to protecting sensitive data. We employ advanced security measures and risk management strategies to ensure that your infrastructure is resilient and secure against evolving threats.
+                <p className="mt-5 text-gray-600 text-base leading-relaxed">
+                    Security is built into every solution — from safeguarding your network to protecting sensitive data.
+                    We employ advanced security measures and risk management strategies to ensure that your infrastructure
+                    is resilient and secure against evolving threats.
                 </p>
             </div>
 
-            {/* Sidebar */}
-            <aside className="lg:w-1/3 space-y-6">
+            {/* === Sidebar === */}
+            <aside className="lg:w-1/3 space-y-8">
                 {/* Consultation Button */}
-                <div className="bg-purple-800 text-white p-4 rounded-lg flex justify-between items-center cursor-pointer">
-                    {/* <span>Contact us to book a consultation</span>
-                    <FaArrowRight /> */}
-                </div>
+                <Link to="/contact-us#contactform">
+                    <div className="bg-gradient-to-r from-[#1f426c] to-blue-600 text-white px-6 py-4 rounded-xl shadow-md flex items-center justify-between cursor-pointer hover:opacity-90 transition">
+                        <span className="font-semibold text-lg">Book a Tech Consultation</span>
+                        <FaArrowDown className="ml-3" />
+                    </div>
+                </Link>
 
-                {/* Aligned Services */}
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-900">Strategic Technology Services</h3>
-                    <p className="mt-4 text-gray-400">Our suite of aligned services is designed to drive enterprise growth, operational excellence, and sustainable innovation. We support organizations in navigating the complexities of digital transformation through:</p>
-                    <ul className="mt-4 space-y-2 text-gray-700">
-                        <li> <b>Digital Transformation Strategy</b>  Tailored roadmaps to accelerate business modernization and innovation.</li>
-                        <li> <b>Cloud & Data Center</b>  Infrastructure Scalable, secure, and efficient cloud and on-prem solutions to support your IT needs.</li>
-                        <li> <b>AI & Machine Learning Integration</b>  Intelligent systems that enhance automation, analytics, and decision-making.</li>
-                        <li> <b>Cybersecurity & Risk Management</b> Proactive protection frameworks to secure data, systems, and operations.</li>
-                        <li> <b>IT Modernization & Optimization</b> Streamlined technology ecosystems that boost performance and reduce costs.</li>
+                {/* Services Overview */}
+                <div className="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                        Strategic Technology Services
+                    </h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">
+                        Our suite of services is designed to drive enterprise growth, operational excellence, and innovation.
+                        We guide organizations through the complexities of digital transformation by providing:
+                    </p>
+                    <ul className="mt-6 space-y-4">
+                        {[
+                            {
+                                title: "Digital Transformation Strategy",
+                                desc: "Tailored roadmaps to accelerate modernization and innovation.",
+                            },
+                            {
+                                title: "Cloud & Data Center Infrastructure",
+                                desc: "Scalable, secure, and efficient cloud/on-prem solutions.",
+                            },
+                            {
+                                title: "AI & Machine Learning Integration",
+                                desc: "Intelligent systems to enhance automation and analytics.",
+                            },
+                            {
+                                title: "Cybersecurity & Risk Management",
+                                desc: "Frameworks to secure data, systems, and operations.",
+                            },
+                            {
+                                title: "IT Modernization & Optimization",
+                                desc: "Streamlined tech ecosystems that boost performance and cut costs.",
+                            },
+                        ].map(({ title, desc }, i) => (
+                            <li key={i} className="flex items-start gap-3">
+                                <div className="flex-shrink-0 mt-1 text-blue-600">
+                                    <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div className="text-gray-700">
+                                    <span className="font-semibold">{title}:</span> {desc}
+                                </div>
+                            </li>
+                        ))}
                     </ul>
-                </div>
-
-                {/* Download Brochure */}
-                <div className="bg-white p-4 rounded-lg shadow-lg flex justify-between items-center cursor-pointer">
-                    {/* <span className="font-bold">Download Our Technology Solutions Brochure</span>
-                    <FaArrowRight /> */}
-                </div>
-
-                {/* eBook Section */}
-                <div className="bg-teal-600 text-white p-6 rounded-lg text-center cursor-pointer">
-                    {/* <span className="text-lg font-bold">Read our eBook: The Future of Technology in Business</span>
-                    <FaArrowRight className="inline ml-2" /> */}
                 </div>
             </aside>
         </section>

@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ContactForm = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -14,6 +17,7 @@ const ContactForm = () => {
         consent: false,
         referralName: "", // <-- added
     });
+    
 
 
 
@@ -29,6 +33,7 @@ const ContactForm = () => {
         "Conversational AI",
         "Modern Workplace",
         "Careers",
+        "Cloud Storage",
         "Other",
     ];
 
@@ -272,7 +277,10 @@ const ContactForm = () => {
                         Whether you're just starting out or bringing years of experience, we provide the platform to grow and succeed.
                     </p>
                     <p className="text-gray-600 text-sm mb-3">Explore opportunities in IT, cloud engineering, sales, project management, and more.</p>
-                    <button className="bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded transition duration-300">
+                    <button
+                        onClick={() => navigate("/careers")}
+                        className="bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded transition duration-300"
+                    >
                         See Our Available Roles
                     </button>
                 </div>

@@ -1,25 +1,15 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaUsers, FaChartLine } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const testimonials = [
-    /* {
-        "quote": "The Cloud Sentrics consulting team consistently delivers exceptional support. We always connect with a live,knowledgeable expert who goes beyond expectations—offering insights that extend well past the immediate project scope. Their expertise in cloud migration and DevSecOps has been invaluable to our team.",
-        "name": "Dave Cebell",
-        "title": "The Dallas Morning News"
-    }, */
     {
-        "quote": "Working with Cloud Sentrics has been a game-changer. From the detailed project documentation to real-time collaboration and proactive communication, their service has far surpassed what we typically expect from a technology partner. They’ve set a new benchmark in cloud service delivery.",
-        "name": "Rick Hodges",
-        "title": "Project Manager, Texas Health"
-    },
-    {
-        "quote": "Our business transformed with Cloud Sentrics Integration, making cloud migration seamless and efficient.",
-        "name": "Dare",
-        "title": "CEO, InnovateX"
+        quote: "Our business transformed with Cloud Sentrics Integration, making cloud migration seamless and efficient.",
+        name: "Dare",
+        title: "CEO, InnovateX"
     }
 ];
-
 
 const CustomerPage = () => {
     const navigate = useNavigate();
@@ -34,67 +24,71 @@ const CustomerPage = () => {
     };
 
     return (
-        <section className="bg-gray-100 py-12 px-4 md:px-16">
-            <h2 className="text-3xl font-bold text-[#1e4272] text-center mb-8">Customer Success</h2>
+        <section className="bg-gradient-to-b from-[#f0f4f8] to-white py-20 px-4 sm:px-8 lg:px-24">
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-center text-[#1e4272] mb-16 tracking-tight">
+                Customer Success Stories
+            </h2>
 
-            {/* Main Content */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                {/* Customer Success Stories */}
-                <div className="space-y-6">
-                    <div className="relative bg-white shadow-lg rounded-lg overflow-hidden">
-                        <img
-                            src="/assets/data-trans.jpg"
-                            alt="Cloud Migration"
-                            className="w-full h-48 object-cover"
-                        />
-                        <div className="p-6">
-                            <h3 className="text-xl text-black font-semibold">ARM Takes to the Cloud with Sentrics Integration</h3>
-                            <p className="text-gray-600 mt-2">
-                                Cloud Sentrics architects a cloud-driven IT ecosystem, delivering seamless connectivity and a comprehensive Modern Workplace Solution powered by AI and automation.
-                            </p>
+            <div className="grid md:grid-cols-2 gap-12 items-stretch">
+                {/* Testimonial Card */}
+                <div className="bg-white text-gray-800 rounded-3xl px-8 py-10 shadow-xl hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                    <div className="flex justify-center mb-6">
+                        <div className="bg-blue-100 p-5 rounded-full">
+                            <FaUsers className="text-blue-600 text-3xl" />
                         </div>
                     </div>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentTestimonial}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -30 }}
+                            transition={{ duration: 0.4 }}
+                            className="text-center space-y-4"
+                        >
+                            <h4 className="text-2xl font-semibold text-blue-900">
+                                {testimonials[currentTestimonial].name}
+                            </h4>
+                            <p className="text-sm text-gray-500">{testimonials[currentTestimonial].title}</p>
+                            <blockquote className="italic text-lg text-gray-600 leading-relaxed">
+                                “{testimonials[currentTestimonial].quote}”
+                            </blockquote>
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Navigation */}
+                    <div className="flex justify-between items-center mt-10 pt-4 border-t border-gray-200 text-sm">
+                        <button
+                            onClick={prevTestimonial}
+                            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+                        >
+                            <FaChevronLeft /> Prev
+                        </button>
+                        <span className="text-gray-500">
+                            {currentTestimonial + 1} / {testimonials.length}
+                        </span>
+                        <button
+                            onClick={nextTestimonial}
+                            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+                        >
+                            Next <FaChevronRight />
+                        </button>
+                    </div>
                 </div>
 
-                {/* Testimonial Section */}
-                <div className="bg-blue-900 text-white p-6 rounded-lg flex flex-col justify-between relative shadow-lg h-auto pb-12">
-
-                    {/* User Info */}
-                    <div className="text-center space-y-0 pt-0 mt-0">
-                        <FaUsers className="mx-auto text-4xl" />
-                        <h4 className="font-semibold text-lg">{testimonials[currentTestimonial].name}</h4>
-                        <p className="text-sm opacity-75">{testimonials[currentTestimonial].title}</p>
-                    </div>
-
-                    <blockquote className="text-lg italic transition-opacity duration-500 text-center mt-8">
-                        "{testimonials[currentTestimonial].quote}"
-                    </blockquote>
-
-
-
-                    {/* Navigation Buttons (Fixed & No Overlap) */}
-                    <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex items-center space-x-3 bg-white text-black px-4 py-2 rounded-full shadow-md">
-                        <button onClick={prevTestimonial} className="p-2 text-gray-700 hover:text-black">
-                            <FaChevronLeft />
-                        </button>
-                        <span className="text-sm">{`${currentTestimonial + 1}/${testimonials.length}`}</span>
-                        <button onClick={nextTestimonial} className="p-2 text-gray-700 hover:text-black">
-                            <FaChevronRight />
-                        </button>
-                    </div>
-
-                </div>
-
-
-                {/* Call-to-Action Section (Newly Added) */}
-                <div className="bg-white shadow-lg rounded-lg p-6 text-center flex flex-col justify-center items-center">
-                    <FaChartLine className="text-5xl text-blue-700 mb-4" />
-                    <h3 className="text-xl font-bold">Join 10,000+ Satisfied Clients</h3>
-                    <p className="text-gray-600 mt-2">Boost your IT capabilities with cutting-edge solutions.</p>
+                {/* Call to Action */}
+                <div className="bg-white shadow-2xl rounded-3xl p-10 flex flex-col items-center justify-center text-center hover:shadow-3xl transition-shadow duration-300">
+                    <FaChartLine className="text-6xl text-blue-700 mb-6 animate-pulse" />
+                    <h3 className="text-2xl font-bold text-gray-900">
+                        Join 10,000+ Satisfied Clients
+                    </h3>
+                    <p className="text-gray-600 mt-4 text-base leading-relaxed">
+                        Boost your IT capabilities with cutting-edge cloud solutions tailored to your business goals.
+                    </p>
                     <button
-                        onClick={() => navigate('/technology')} // or whatever your route is
-                        className="mt-4 bg-blue-700 text-white py-2 px-6 rounded-lg shadow hover:bg-blue-800 transition"
+                        onClick={() => navigate('/technology#consultation')}
+                        className="mt-6 bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition-transform transform hover:scale-105 duration-300"
                     >
                         Get Started
                     </button>

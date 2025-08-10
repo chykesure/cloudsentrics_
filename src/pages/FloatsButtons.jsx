@@ -90,7 +90,7 @@ const FloatsButtons = () => {
 
             <div className="fixed bottom-[84px] right-9 mb-12 z-50">
                 {/* SVG Curved Text */}
-                <svg width="120" height="120" className="absolute left-[-28px] top-[-28px] pointer-events-none">
+                <svg width="120" height="120" className="absolute left-[-30px] top-[-29px] pointer-events-none">
                     <defs>
                         <path
                             id="curve"
@@ -98,11 +98,12 @@ const FloatsButtons = () => {
                             fill="none"
                         />
                     </defs>
-                    <text fontSize="16" fontWeight="bold" fill="yellow">
+                    <text fontSize="17" fontWeight="bold" fill="#09182bff">
                         <textPath href="#curve" startOffset="0%">
-                            ENQUIRY • ENQUIRY 
+                            ENQUIRY • ENQUIRY
                         </textPath>
                     </text>
+
                 </svg>
 
                 {/* Enquiry Button */}

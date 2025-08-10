@@ -12,6 +12,7 @@ import AwsCertification from "../../students/certificate/Aws";
 
 const backgroundImage = '/assets/sentrics3.jpg';
 const logo = "/assets/logo.jpg";
+const cert = "/assets/NDPC.jpg";
 
 function PartnerPage() {
     // State for mobile menu
@@ -76,6 +77,26 @@ function PartnerPage() {
             {/* AWS CERTIFICATION */}
             <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-16 bg-gray-100">
                 <AwsCertification />
+            </section>
+
+            {/* NDPC Preview Section */}
+            <section className="px-4 sm:px-6 md:px-8 py-16 bg-white">
+                <div className="max-w-6xl mx-auto text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Nigeria Data Protection Commission
+                    </h2>
+                    <p className="text-lg text-gray-600 mb-8">
+                        Our compliance with NDPC ensures we uphold the highest standards of data security and privacy.
+                    </p>
+                    <motion.img
+                        src={cert}
+                        alt="NDPC Certification"
+                        className="w-full max-w-4xl mx-auto rounded-xl shadow-lg"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    />
+                </div>
             </section>
 
             <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-8 bg-gray-100">

@@ -109,7 +109,7 @@ const sections = [
     `
   },
   {
-    title: "About Of Cloud Sentrics",
+    title: "About Cloud Sentrics",
     image: "/assets/logo.jpg",
     content: `
       Founded in 2021 by Oluwadamilare Odo, Cloud Sentrics was born out of a personal journey 
@@ -159,7 +159,7 @@ const MoreAbout = () => {
   return (
     <section className="bg-gray-100 py-10 px-4">
       <h2 className="text-center text-3xl font-bold text-gray-800 mb-10">
-        Find out more about Cloud Sentrics Integration
+        Cloud Sentrics Integration
       </h2>
 
       {selectedSection ? (

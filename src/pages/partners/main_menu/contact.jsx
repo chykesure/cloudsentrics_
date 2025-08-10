@@ -5,7 +5,9 @@ import Footer from "../home/Footer";
 import SearchArticles from "./search";
 import ContactForm from "./contactother";
 import ContactMap from "./contactmap";
-import React, { useState} from "react";
+import React, { useState } from "react";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const logo = "/assets/logo.jpg";
 const heroImage = "/assets/contact.jpg";
@@ -14,12 +16,20 @@ const ContactUs = () => {
 
     // State for mobile menu
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
-   
+    useEffect(() => {
+        if (location.hash === '#contactform') {
+            const el = document.getElementById('contactform');
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [location]);
+
 
     return (
         <div className="min-h-screen bg-[#0d1b2a] text-white">
             {/* Header Section */}
-            
+
 
             {/* Hero Section */}
             <Header />
@@ -60,7 +70,7 @@ const ContactUs = () => {
             </section>
 
 
-            <section className="px-4 sm:px-6 md:px-6 lg:px-8 py-8 bg-gray-100">
+            <section id="contactform" className="px-4 sm:px-6 md:px-6 lg:px-8 py-8 bg-gray-100">
                 <ContactForm />
             </section>
 

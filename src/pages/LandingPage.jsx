@@ -60,36 +60,35 @@ const LandingPage = () => {
 
         <div className="min-h-screen flex flex-col justify-between w-full"
             style={{
-                backgroundImage: `url(${backgroundImages[bgIndex]})`,
+                background: "linear-gradient(to bottom right, #1f426c, #ffffff)",
                 backgroundSize: "cover",
-                backgroundPosition: "center",
-                transition: "background-image 1s ease-in-out"
+                backgroundPosition: "center"
             }}
         >
+
             <Header />
             {/* TEXT SLIDER SECTION */}
             <section className="w-full text-center py-12 sm:py-16 md:py-20 px-4 mt-12 rounded-lg">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-blue-900 to-blue-500 text-white bg-clip-text">
+                <h2
+                    className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-blue-900 to-blue-500 text-white bg-clip-text"
+                    style={{ fontFamily: "'DM Serif Display', serif" }}
+                >
                     Build Your Future with <br />
                     <span className="text-white">Cloud Sentrics</span>
                 </h2>
 
+
                 <div className="relative overflow-hidden h-auto min-h-[80px] flex justify-center items-center mt-6 rounded-lg shadow-md max-w-5xl mx-auto px-6">
-                    <AnimatePresence mode="wait">
-                        <motion.p
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 1, ease: "easeInOut", type: "tween" }}
-                            className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold tracking-wide text-center leading-relaxed"
-                        >
-                            {textSlides[index]}
-                        </motion.p>
-                    </AnimatePresence>
+                    <p
+                        className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold tracking-wide text-center leading-relaxed"
+                        style={{ fontFamily: "'Playfair Display', serif" }}
+                    >
+                        {textSlides[index]}
+                    </p>
                 </div>
 
             </section>
+
 
 
             {/* FLEX CONTAINER FOR BOTH SECTIONS */}
@@ -251,7 +250,7 @@ const LandingPage = () => {
                     Why Choose <span style={{ color: primaryColor }}>Cloud Sentrics?</span>
                 </h2>
                 <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 text-center mt-4 sm:mt-6 max-w-4xl mx-auto leading-relaxed">
-                Our program is designed to provide hands-on, practical training that helps you transition into Cloud and DevSecOps roles with confidence. Companies choose Cloud Sentrics because we offer customized cloud solutions tailored to your business needs, leverage our expertise in cloud technologies and security to ensure scalable and secure environments, and provide end-to-end support from consultation through to deployment and ongoing optimization for seamless integration.
+                    Our program is designed to provide hands-on, practical training that helps you transition into Cloud and DevSecOps roles with confidence. Companies choose Cloud Sentrics because we offer customized cloud solutions tailored to your business needs, leverage our expertise in cloud technologies and security to ensure scalable and secure environments, and provide end-to-end support from consultation through to deployment and ongoing optimization for seamless integration.
                 </p>
 
                 <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -319,10 +318,10 @@ const LandingPage = () => {
                             </div>
                         </div>
                         <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mt-4 sm:mt-6">
-                        Customized Solutions
+                            Customized Solutions
                         </h3>
                         <p className="text-base sm:text-lg text-gray-600 mt-3 sm:mt-4">
-                        We provide tailored cloud solutions that align with your business needs for maximum efficiency and growth.
+                            We provide tailored cloud solutions that align with your business needs for maximum efficiency and growth.
                         </p>
                     </motion.div>
 
@@ -337,10 +336,10 @@ const LandingPage = () => {
                             </div>
                         </div>
                         <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mt-4 sm:mt-6">
-                        Cloud & Security Expertise
+                            Cloud & Security Expertise
                         </h3>
                         <p className="text-base sm:text-lg text-gray-600 mt-3 sm:mt-4">
-                        Leverage our deep knowledge in cloud technologies and DevSecOps to ensure secure and scalable cloud environments.
+                            Leverage our deep knowledge in cloud technologies and DevSecOps to ensure secure and scalable cloud environments.
                         </p>
                     </motion.div>
 
@@ -355,10 +354,10 @@ const LandingPage = () => {
                             </div>
                         </div>
                         <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mt-4 sm:mt-6">
-                        End-to-End Support
+                            End-to-End Support
                         </h3>
                         <p className="text-base sm:text-lg text-gray-600 mt-3 sm:mt-4">
-                        From consultation to deployment and ongoing optimization, we offer comprehensive support for seamless cloud integration.
+                            From consultation to deployment and ongoing optimization, we offer comprehensive support for seamless cloud integration.
                         </p>
                     </motion.div>
                 </div>

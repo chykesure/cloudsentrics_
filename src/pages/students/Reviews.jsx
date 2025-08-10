@@ -35,14 +35,15 @@ const TestimonialPage = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center text-center py-20 px-6 md:px-16 
-                    bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 min-h-[80vh]">
+    <div className="relative flex flex-col items-center text-center py-10 sm:py-16 px-4 sm:px-6 md:px-16 
+                bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 min-h-[60vh] sm:min-h-[80vh] z-10">
 
       {/* Background Image Overlay */}
-      <div className="absolute inset-0 bg-[url('/your-background-image.jpg')] bg-cover bg-center opacity-20"></div>
+      <div className="absolute inset-0 bg-[url('/your-background-image.jpg')] bg-cover bg-center opacity-20 z-0"></div>
+
 
       {/* Heading */}
-      <h2 className="relative z-10 text-5xl md:text-6xl font-extrabold text-gray-900 mb-12">
+      <h2 className="relative z-10 text-3xl sm:text-4xl md:text-6xl font-extrabold text-gray-900 mb-10 sm:mb-12">
         Testimonial
       </h2>
 
@@ -51,7 +52,7 @@ const TestimonialPage = () => {
                       shadow-xl border border-gray-300 p-12 flex flex-col items-center gap-8">
 
         {/* Testimonial Content */}
-        <p className="text-2xl md:text-3xl text-gray-700 italic font-medium mb-6 leading-relaxed">
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-700 italic font-medium mb-6 leading-relaxed">
           "{testimonials[current].message}"
         </p>
 

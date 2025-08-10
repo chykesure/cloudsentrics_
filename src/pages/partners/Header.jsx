@@ -44,7 +44,7 @@ const Header = () => {
     { label: "TECHNOLOGY", path: "/technology" },
     { label: "NEWS", path: "/news" },
     { label: "ABOUT US", path: "/about-us" },
-    { label: "CAREERS", path: "/careers" },
+    /* { label: "CAREERS", path: "/careers" }, */
     { label: "CONTACT US", path: "/contact-us" },
   ];
 
