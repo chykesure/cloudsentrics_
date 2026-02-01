@@ -226,14 +226,26 @@ const LandingPage = () => {
                             </div>
                         </div>
 
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ duration: 0.2 }}
-                            className="mt-8 bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 self-start"
-                            onClick={() => navigate('/PartnerPage')}
-                        >
-                            Partner With Us
-                        </motion.button>
+                        <div className="mt-8 flex space-x-4">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.2 }}
+                                className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700"
+                                onClick={() => navigate('/PartnerPage')}
+                            >
+                                Partner With Us
+                            </motion.button>
+
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.2 }}
+                                className="bg-blue-900 text-white px-6 py-3 rounded-md hover:bg-blue-950"
+                                onClick={() => window.open('https://onboardingportal.cloudsentrics.org/', '_blank')}
+                            >
+                                Access Onboarding Portal
+                            </motion.button>
+                        </div>
+
                     </motion.section>
                 </div>
             </div>
