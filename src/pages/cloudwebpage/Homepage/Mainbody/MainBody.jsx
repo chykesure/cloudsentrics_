@@ -1,6 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const complianceBadges = [
+  { label: 'GDPR-Ready', full: 'General Data Protection Regulation' },
+  { label: 'CCRF-ready', full: 'Cloud Computing Regulatory Framework' },
+  { label: 'HIPAA-ready', full: 'Health Insurance Portability and Accountability Act' },
+  { label: 'NDPC-Compliant', full: 'Nigeria Data Protection Commission' },
+];
+
 const MainBody = () => {
   return (
     <>
@@ -63,13 +70,14 @@ const MainBody = () => {
                 </p>
 
                 <div className="flex justify-center lg:justify-start mt-6">
-                  <motion.button
+                  <motion.a
                     whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(6,182,212,0.5)' }}
                     whileTap={{ scale: 0.97 }}
+                    href="/get-started"
                     className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold px-8 sm:px-10 py-4 sm:py-5 rounded-full text-lg sm:text-xl shadow-xl shadow-cyan-500/30 transition-all duration-300 w-full sm:w-auto"
                   >
                     Get started
-                  </motion.button>
+                  </motion.a>
                 </div>
               </motion.div>
             </div>
@@ -101,13 +109,14 @@ const MainBody = () => {
                 </p>
 
                 <div className="flex justify-center lg:justify-start mt-6">
-                  <motion.button
+                  <motion.a
                     whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(6,182,212,0.5)' }}
                     whileTap={{ scale: 0.97 }}
+                    href="/get-started"
                     className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold px-8 sm:px-10 py-4 sm:py-5 rounded-full text-lg sm:text-xl shadow-xl shadow-cyan-500/30 transition-all duration-300 w-full sm:w-auto"
                   >
                     Share Securely
-                  </motion.button>
+                  </motion.a>
                 </div>
               </motion.div>
 
@@ -151,7 +160,7 @@ const MainBody = () => {
           </div>
         </section>
 
-        {/* Section 3: Build Your Future with Cloud Sentrics – image on right */}
+        {/* Section 3: Build Your Future with Cloud Sentrics */}
         <section className="relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 lg:px-12 bg-white text-[#001F3F]">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 lg:gap-16">
@@ -172,9 +181,10 @@ const MainBody = () => {
                 </p>
 
                 <div className="flex justify-center lg:justify-start mt-6">
-                  <motion.button
+                  <motion.a
                     whileHover={{ scale: 1.04, boxShadow: '0 10px 30px rgba(0, 31, 63, 0.15)' }}
                     whileTap={{ scale: 0.98 }}
+                    href="/get-started"
                     className="
                       bg-[#001F3F] hover:bg-[#002b55] 
                       text-white font-semibold 
@@ -185,7 +195,7 @@ const MainBody = () => {
                     "
                   >
                     Get started
-                  </motion.button>
+                  </motion.a>
                 </div>
               </motion.div>
 
@@ -213,40 +223,40 @@ const MainBody = () => {
               </motion.div>
             </div>
 
-            {/* Badges row – centered below */}
-            <div className="mt-12 md:mt-16 flex justify-center">
-              <div className="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20">
-                {[
-                  { label: 'GDPR-Ready', full: 'General Data Protection Regulation' },
-                  { label: 'CCRF-ready', full: 'Cloud Computing Regulatory Framework' },
-                  { label: 'HIPAA-ready', full: 'Health Insurance Portability and Accountability Act' },
-                  { label: 'NDPC-Compliant', full: 'Nigeria Data Protection Commission' },
-                ].map((item, i) => (
-                  <div 
-                    key={i} 
-                    className="flex flex-col items-center text-center flex-shrink-0 min-w-[100px] sm:min-w-[120px] md:min-w-[140px] lg:min-w-[160px]"
+            {/* ──────────────────────── Badges ──────────────────────── */}
+            <div className="mt-16 md:mt-20 flex justify-center px-4">
+              <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14 xl:gap-16 max-w-8xl">
+                {complianceBadges.map((badge) => (
+                  <div
+                    key={badge.label}
+                    className="flex flex-col items-center text-center min-w-[110px] sm:min-w-[130px] md:min-w-[150px] lg:min-w-[170px]"
                   >
-                    <div className="
-                      w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 
-                      rounded-full bg-blue-100 
-                      flex items-center justify-center 
-                      text-xl sm:text-2xl md:text-3xl lg:text-4xl 
-                      text-blue-700 
-                      border-2 border-blue-500 
-                      mb-2 md:mb-3
-                    ">
+                    <div
+                      className={`
+                        w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20
+                        rounded-full bg-cyan-50/80 border-2 border-cyan-500/70
+                        flex items-center justify-center
+                        text-2xl sm:text-3xl md:text-4xl font-bold
+                        text-cyan-700
+                        shadow-md shadow-cyan-500/20
+                        mb-3 md:mb-4
+                      `}
+                    >
                       ✓
                     </div>
-                    <span className="font-bold text-sm sm:text-base md:text-lg lg:text-xl whitespace-nowrap">
-                      {item.label}
-                    </span>
-                    <span className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-500 mt-1 lg:mt-2 text-center leading-tight">
-                      {item.full}
-                    </span>
+
+                    <div className="font-semibold text-base sm:text-lg md:text-xl text-gray-900">
+                      {badge.label}
+                    </div>
+
+                    <div className="text-xs sm:text-sm md:text-base text-gray-600 mt-1 leading-tight max-w-[160px] lg:max-w-[180px]">
+                      {badge.full}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+            {/* ──────────────────────────────────────────────────────── */}
           </div>
         </section>
       </div>
