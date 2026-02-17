@@ -27,15 +27,15 @@ const HeroSection = () => {
             </p>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-8 md:mb-12">
-              Secure Cloud Storage &<br className="hidden sm:block" />
+              Secure Cloud Storage & <br className="hidden sm:block" />
               Controlled File Sharing Platform
               <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600 bg-clip-text text-transparent">
+              <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-8 md:mb-12">
                 Built for Modern Organizations.
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-4xl mx-auto mb-10 md:mb-14 leading-relaxed font-light">
+            <p className="text-lg md:text-xl lg:text-3xl text-white max-w-4xl mx-auto mb-10 md:mb-14 leading-relaxed font-bold">
               Store, protect, and share your data in a scalable cloud environment designed<br className="hidden md:block" />
               for control, compliance, and confidence.
             </p>

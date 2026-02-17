@@ -73,11 +73,16 @@ const CloudSentricsFeatures = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none z-10" />
 
-            <img
-              src="/news15.png"
-              alt="Channels TV feature thumbnail"
+            {/* Actual video as thumbnail – no poster, no static image */}
+            <video
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+              muted
+              playsInline
+              preload="metadata"
+              src="/tv_news.mp4"
+            >
+              <source src="/tv_news.mp4" type="video/mp4" />
+            </video>
 
             {/* Large animated play button */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -107,20 +112,16 @@ const CloudSentricsFeatures = () => {
           </div>
         </div>
 
-        {/* ────────────────────────────────────────────────
-          VIDEO MODAL (TV-like popup / lightbox)
-      ──────────────────────────────────────────────── */}
+        {/* VIDEO MODAL (TV-like popup / lightbox) */}
         {isVideoOpen && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm transition-opacity duration-300"
-            onClick={() => setIsVideoOpen(false)} // click outside → close
+            onClick={() => setIsVideoOpen(false)}
           >
-            {/* Modal content – prevents close when clicking inside */}
             <div
               className="relative w-full max-w-6xl mx-4 sm:mx-8 lg:mx-12 rounded-2xl overflow-hidden shadow-2xl shadow-blue-950/70 border border-blue-800/30 bg-black"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close button – top right, TV-style */}
               <button
                 className="absolute top-4 right-4 z-30 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-red-600/80 text-white transition-colors duration-200 shadow-lg backdrop-blur-sm border border-white/20 focus:outline-none focus:ring-4 focus:ring-red-500/40"
                 onClick={() => setIsVideoOpen(false)}
@@ -131,14 +132,12 @@ const CloudSentricsFeatures = () => {
                 </svg>
               </button>
 
-              {/* Video player */}
               <video
                 className="w-full aspect-video"
                 controls
                 autoPlay
                 playsInline
                 src="/tv_news.mp4"
-                poster="/news15.png"
               >
                 <source src="/tv_news.mp4" type="video/mp4" />
                 Your browser does not support the video tag.

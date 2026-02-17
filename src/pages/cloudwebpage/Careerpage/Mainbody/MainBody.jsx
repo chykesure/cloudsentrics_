@@ -14,11 +14,137 @@ const CheckItem = ({ children }) => (
 );
 
 const CloudSentricsFeatures = () => {
-  const [openIndex, setOpenIndex] = useState(0);
+  const SCRIPT_URL =
+    //"https://script.google.com/macros/s/AKfycbw2EcSnnwWvKabUvtmVl64LeNPrGxetnY-7976l626Jzh7AMoJDCVF4szz8QHyPF8A/exec";
+    "https://script.google.com/macros/s/AKfycbwiQKXzJPspOIVN-xvKf7gwfZGNn9RNCzO-0T1yX0WZHjYAfetJK-iceIzQ-S22xPEw/exec";
+
   const [isNoVacancyModalOpen, setIsNoVacancyModalOpen] = useState(false);
   const [isNoOpenRolesModalOpen, setIsNoOpenRolesModalOpen] = useState(false);
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? -1 : index);
+
+  // ── Recruitment Form State ──
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    company: "",
+    industry: "",
+    email: "",
+    phone: "",
+    message: "",
+    marketingEmails: false,
+    keepOnFile: false,
+    cvBase64: "",
+    cvFileName: "",
+    cvMimeType: "",
+  });
+
+  const [cvError, setCvError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_TYPES = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
+
+  const handleChange = (e) => {
+    const { id, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [id]: checked }));
+    } else {
+      setForm((prev) => ({ ...prev, [id]: value }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+      setCvError("File size exceeds 5MB limit");
+      setForm((prev) => ({ ...prev, cvBase64: "", cvFileName: "", cvMimeType: "" }));
+      return;
+    }
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setCvError("Only PDF, DOC, or DOCX files allowed");
+      setForm((prev) => ({ ...prev, cvBase64: "", cvFileName: "", cvMimeType: "" }));
+      return;
+    }
+
+    setCvError("");
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(",")[1];
+      setForm((prev) => ({
+        ...prev,
+        cvBase64: base64,
+        cvFileName: file.name,
+        cvMimeType: file.type,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus(null);
+
+    if (!form.firstName.trim() || !form.email.trim()) {
+      setStatus({
+        type: "error",
+        msg: "First Name and Email are required",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const data = { ...form };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(data).toString(),
+      });
+
+      setStatus({
+        type: "success",
+        msg: "Application submitted successfully! We'll review your CV soon.",
+      });
+
+      // Reset form
+      setForm({
+        firstName: "",
+        lastName: "",
+        company: "",
+        industry: "",
+        email: "",
+        phone: "",
+        message: "",
+        marketingEmails: false,
+        keepOnFile: false,
+        cvBase64: "",
+        cvFileName: "",
+        cvMimeType: "",
+      });
+      setCvError("");
+    } catch (err) {
+      console.error("Submission error:", err);
+      setStatus({
+        type: "error",
+        msg: "Something went wrong. Please try again or contact us directly.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,12 +155,10 @@ const CloudSentricsFeatures = () => {
       <section className="relative bg-white text-slate-900 py-20 md:py-28 lg:py-36">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-12 text-center">
           <div className="space-y-6 md:space-y-10">
-            {/* Small tagline – uppercase, cyan accent */}
             <p className="text-lg sm:text-xl md:text-2xl font-medium tracking-wide text-cyan-600 uppercase">
               FIND YOUR NEXT ROLE WITH US
             </p>
 
-            {/* Main headline with gradient on key words */}
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
               Build Your{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700">
@@ -49,7 +173,6 @@ const CloudSentricsFeatures = () => {
           </div>
         </div>
       </section>
-
 
       {/* Second Section - Cards */}
       <section className="bg-[#0f172a] text-white py-20 lg:py-28 relative overflow-hidden">
@@ -92,18 +215,7 @@ const CloudSentricsFeatures = () => {
                 <button
                   type="button"
                   onClick={() => setIsNoVacancyModalOpen(true)}
-                  className="
-              inline-flex items-center justify-center 
-              w-full sm:w-auto px-8 py-4 
-              text-base font-bold text-white 
-              transition-all duration-200 
-              bg-gradient-to-r from-cyan-500 to-blue-600 
-              rounded-full 
-              hover:from-cyan-400 hover:to-blue-500 
-              shadow-lg hover:shadow-cyan-500/30 
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500
-              cursor-pointer active:scale-95 select-none
-            "
+                  className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full hover:from-cyan-400 hover:to-blue-500 shadow-lg hover:shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 cursor-pointer active:scale-95 select-none"
                 >
                   View All Vacancies
                   <svg className="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +225,7 @@ const CloudSentricsFeatures = () => {
               </div>
             </div>
 
-            {/* Card 2 - Submit CV (unchanged) */}
+            {/* Card 2 */}
             <div className="group bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-indigo-500/20 transition-all duration-500 hover:-translate-y-2">
               <div className="overflow-hidden h-64 relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -136,22 +248,12 @@ const CloudSentricsFeatures = () => {
                 </p>
                 <button
                   onClick={() => {
-                    document.getElementById('submit-cv')?.scrollIntoView({
-                      behavior: 'smooth',
-                      block: 'start'
+                    document.getElementById("submit-cv")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
                     });
                   }}
-                  className="
-              inline-flex items-center justify-center 
-              w-full sm:w-auto px-8 py-4 
-              text-base font-bold text-white 
-              transition-all duration-200 
-              bg-slate-900 rounded-full 
-              hover:bg-slate-800 
-              shadow-lg hover:shadow-slate-900/30 
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900
-              cursor-pointer active:scale-95 select-none
-            "
+                  className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-slate-900 rounded-full hover:bg-slate-800 shadow-lg hover:shadow-slate-900/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 cursor-pointer active:scale-95 select-none"
                 >
                   Submit Your CV
                   <svg className="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,28 +270,19 @@ const CloudSentricsFeatures = () => {
           </div>
         </div>
 
-        {/* ────────────────────────────────────────────────
-       Custom Modal (replaces <dialog>)
-  ──────────────────────────────────────────────── */}
+        {/* No Vacancy Modal */}
         {isNoVacancyModalOpen && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setIsNoVacancyModalOpen(false)}
           >
             <div
-              className={`
-          relative bg-white text-slate-900 
-          max-w-md sm:max-w-lg w-11/12 rounded-2xl shadow-2xl border border-slate-200/70
-          p-8 transform transition-all duration-300 ease-out
-          ${isNoVacancyModalOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-8'}
-        `}
+              className="relative bg-white text-slate-900 max-w-md sm:max-w-lg w-11/12 rounded-2xl shadow-2xl border border-slate-200/70 p-8 transform transition-all duration-300 ease-out scale-100 opacity-100 translate-y-0"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close button (×) */}
               <button
                 className="absolute top-4 right-5 text-slate-400 hover:text-slate-700 text-2xl leading-none"
                 onClick={() => setIsNoVacancyModalOpen(false)}
-                aria-label="Close modal"
               >
                 ×
               </button>
@@ -203,18 +296,12 @@ const CloudSentricsFeatures = () => {
               </p>
 
               <p className="text-center text-slate-500 mb-8 text-base">
-                Feel free to submit your CV we'll keep it in our talent pool and contact you when a fitting opportunity arises.
+                Feel free to submit your CV — we'll keep it in our talent pool and contact you when a fitting opportunity arises.
               </p>
 
               <div className="flex justify-center">
                 <button
-                  className="
-              px-10 py-3.5 text-base md:text-lg font-semibold text-white 
-              bg-gradient-to-r from-cyan-500 to-blue-600 
-              hover:from-cyan-400 hover:to-blue-500 
-              rounded-full shadow-lg hover:shadow-cyan-500/40 
-              transition-all duration-300 active:scale-95
-            "
+                  className="px-10 py-3.5 text-base md:text-lg font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-full shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 active:scale-95"
                   onClick={() => setIsNoVacancyModalOpen(false)}
                 >
                   Got It, Thanks!
@@ -225,13 +312,10 @@ const CloudSentricsFeatures = () => {
         )}
       </section>
 
-
-
-
+      {/* Main Content Section - Values, Be Well, etc. */}
       <section className="bg-white text-zinc-900 py-16 md:py-24 lg:py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 2xl:max-w-screen-2xl">
-
-          {/* === SECTION HEADER === */}
+          {/* SECTION HEADER */}
           <div className="text-center max-w-4xl mx-auto mb-20">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 tracking-tight leading-tight mb-8">
               Build Your Future @ Cloud Sentrics
@@ -241,13 +325,13 @@ const CloudSentricsFeatures = () => {
             </p>
           </div>
 
-          {/* === CORE VALUES GRID (Extracted from text block) === */}
+          {/* CORE VALUES GRID */}
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12 mb-24">
-
-            {/* Card 1: Empowerment */}
             <div className="group p-8 rounded-3xl bg-zinc-50 border border-zinc-100 hover:bg-white hover:shadow-2xl hover:shadow-cyan-900/5 transition-all duration-300">
               <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
               </div>
               <h3 className="text-2xl font-bold text-zinc-900 mb-4">Empowered to Thrive</h3>
               <p className="text-zinc-600 leading-relaxed">
@@ -255,10 +339,11 @@ const CloudSentricsFeatures = () => {
               </p>
             </div>
 
-            {/* Card 2: Growth */}
             <div className="group p-8 rounded-3xl bg-zinc-50 border border-zinc-100 hover:bg-white hover:shadow-2xl hover:shadow-cyan-900/5 transition-all duration-300">
               <div className="w-14 h-14 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
               </div>
               <h3 className="text-2xl font-bold text-zinc-900 mb-4">Continuous Growth</h3>
               <p className="text-zinc-600 leading-relaxed">
@@ -266,10 +351,11 @@ const CloudSentricsFeatures = () => {
               </p>
             </div>
 
-            {/* Card 3: Culture */}
             <div className="group p-8 rounded-3xl bg-zinc-50 border border-zinc-100 hover:bg-white hover:shadow-2xl hover:shadow-cyan-900/5 transition-all duration-300">
               <div className="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
               </div>
               <h3 className="text-2xl font-bold text-zinc-900 mb-4">Inclusive Culture</h3>
               <p className="text-zinc-600 leading-relaxed">
@@ -278,14 +364,11 @@ const CloudSentricsFeatures = () => {
             </div>
           </div>
 
-          {/* === HIGHLIGHT SECTION: Be Well & DEI === */}
+          {/* HIGHLIGHT SECTION: Be Well & DEI */}
           <div className="relative bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8 md:p-12 lg:p-16 overflow-hidden">
-            {/* Decorative circle */}
             <div className="absolute top-0 right-0 -mr-10 -mt-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
-
-              {/* Left: Diversity */}
               <div>
                 <div className="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6">
                   Our Core Values
@@ -298,11 +381,12 @@ const CloudSentricsFeatures = () => {
                 </p>
               </div>
 
-              {/* Right: Be Well */}
               <div className="bg-white p-8 rounded-2xl shadow-xl border border-zinc-100">
                 <h3 className="text-2xl font-bold text-zinc-900 mb-4 flex items-center">
                   <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mr-3">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
                   </span>
                   Be Well @ Cloud Sentrics
                 </h3>
@@ -310,9 +394,11 @@ const CloudSentricsFeatures = () => {
                   This initiative reflects our commitment to employee wellbeing. We offer flexible working arrangements, including hybrid, remote, and office-based roles, designed to support work-life balance across our organization.
                 </p>
                 <ul className="space-y-3">
-                  {['Flexible hybrid options', 'Genuine work-life balance', 'Supportive environment'].map((item, idx) => (
+                  {["Flexible hybrid options", "Genuine work-life balance", "Supportive environment"].map((item, idx) => (
                     <li key={idx} className="flex items-center text-zinc-700 font-medium">
-                      <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                      <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
                       {item}
                     </li>
                   ))}
@@ -320,284 +406,80 @@ const CloudSentricsFeatures = () => {
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
-      <section className="bg-white text-zinc-900 py-16 md:py-24 lg:py-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16">
-
-          {/* === HERO SECTION: Split Layout === */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
-
-            {/* Left Column: Text & CTA */}
-            {/* Left Column: Text & CTA */}
-            <div className="space-y-8 animate-fade-in-up">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                Build Your Future <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
-                  @ Cloud Sentrics
-                </span>
-              </h2>
-
-              <p className="text-lg md:text-xl leading-relaxed text-zinc-600 font-light">
-                Our people are the heart of everything we do. Join a team passionate about supporting your growth and building secure, reliable cloud solutions for the future.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <button
-                  onClick={() => setIsNoOpenRolesModalOpen(true)}
-                  className="
-        inline-flex justify-center items-center px-8 py-4 
-        text-base font-bold text-white 
-        transition-all duration-200 
-        bg-gradient-to-r from-cyan-500 to-blue-600 
-        rounded-full 
-        hover:from-cyan-400 hover:to-blue-500 
-        shadow-lg hover:shadow-cyan-500/30 
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500
-        active:scale-95
-      "
-                >
-                  View Open Roles
-                </button>
-              </div>
-            </div>
-
-            {/* ────────────────────────────────────────────────
-     Simple No Open Roles Modal (hero section popup)
-──────────────────────────────────────────────── */}
-            {isNoOpenRolesModalOpen && (
-              <div
-                className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md px-4 sm:px-6"
-                onClick={() => setIsNoOpenRolesModalOpen(false)}
-              >
-                <div
-                  className={`
-        relative w-full max-w-lg bg-white rounded-3xl shadow-xl border border-gray-100/80
-        p-8 sm:p-10 overflow-hidden
-        transform transition-all duration-300 ease-out
-        scale-100 opacity-100
-        animate-in fade-in zoom-in-95 duration-300
-      `}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Decorative top accent */}
-                  <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600" />
-
-                  {/* Close button – cleaner & more visible */}
-                  <button
-                    className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
-                    onClick={() => setIsNoOpenRolesModalOpen(false)}
-                    aria-label="Close modal"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-
-                  <div className="text-center space-y-6">
-                    {/* Icon + Title */}
-                    <div className="mx-auto w-16 h-16 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 mb-2">
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-
-                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-                      No Open Positions Currently
-                    </h3>
-
-                    <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-prose mx-auto">
-                      We’re not advertising any open roles at this time, but we’re always interested in connecting with talented individuals who share our passion for cloud innovation and excellence.
-                    </p>
-
-                    <p className="text-gray-500 text-sm sm:text-base">
-                      Submit your resume / CV — we’ll add you to our talent community and reach out when a suitable opportunity becomes available.
-                    </p>
-
-                    <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                      <button
-                        onClick={() => {
-                          setIsNoOpenRolesModalOpen(false);
-                          document.getElementById('submit-cv')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }}
-                        className="
-              inline-flex items-center justify-center px-8 py-3.5 
-              text-base font-semibold text-white 
-              bg-gradient-to-r from-cyan-600 to-blue-700 
-              hover:from-cyan-500 hover:to-blue-600 
-              focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600
-              rounded-full shadow-md hover:shadow-lg 
-              transition-all duration-200 active:scale-[0.98]
-            "
-                      >
-                        Submit Your CV
-                        <svg className="ml-2.5 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-
-                      <button
-                        onClick={() => setIsNoOpenRolesModalOpen(false)}
-                        className="
-              px-8 py-3.5 text-base font-medium 
-              text-gray-700 bg-white border border-gray-300 
-              hover:bg-gray-50 hover:border-gray-400 
-              rounded-full transition-colors duration-200
-            "
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Right Column: Image */}
-            <div className="relative lg:h-full">
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-200 to-blue-200 rounded-3xl transform rotate-3 opacity-30 blur-xl"></div>
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-zinc-100">
-                <img
-                  src="/career1.png"
-                  alt="Cloud Sentrics team collaborating"
-                  className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* === VALUE PROPOSITION GRID (Replaces long text block) === */}
-          <div className="grid md:grid-cols-3 gap-8 mb-24">
-            {/* Feature 1 */}
-            <div className="p-6 rounded-2xl bg-zinc-50 hover:bg-white border border-transparent hover:border-zinc-100 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center text-cyan-600 mb-4 group-hover:scale-110 transition-transform">
-                {/* Growth Icon */}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 mb-2">Continuous Growth</h3>
-              <p className="text-zinc-600 leading-relaxed">Real opportunities for professional development through meaningful projects and mentorship.</p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="p-6 rounded-2xl bg-zinc-50 hover:bg-white border border-transparent hover:border-zinc-100 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
-                {/* Balance Icon */}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 mb-2">Be Well</h3>
-              <p className="text-zinc-600 leading-relaxed">Flexible hybrid/remote options and genuine support for work-life balance are part of our DNA.</p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="p-6 rounded-2xl bg-zinc-50 hover:bg-white border border-transparent hover:border-zinc-100 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-110 transition-transform">
-                {/* Diversity Icon */}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 mb-2">Inclusive Culture</h3>
-              <p className="text-zinc-600 leading-relaxed">Diversity and equity are foundational. We empower everyone to thrive in a high-performing environment.</p>
-            </div>
-          </div>
-
-          {/* === TESTIMONIALS: 3-Column Grid (No Carousel) === */}
-          <div className="relative">
-            <div className="text-center mb-16">
-              <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Voices of the Team</h3>
-              <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-
-              {/* Testimonial 1 */}
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
-                <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
-                <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
-                  I have learned so much since starting at Cloud Sentrics. Everyone is so friendly and supportive of my career goals. It's been such a positive experience!
-                </p>
-                <div className="flex items-center border-t border-zinc-100 pt-6">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
-                    MS
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-zinc-900 font-bold text-lg">Mustapha Ibrahim</p>
-                    <p className="text-cyan-600 text-sm font-medium">Administrator</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 2 */}
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
-                <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
-                <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
-                  The continuous learning opportunities and mentorship have accelerated my career in cloud security. The inclusive culture makes me feel valued every day.
-                </p>
-                <div className="flex items-center border-t border-zinc-100 pt-6">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
-                    FY
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-zinc-900 font-bold text-lg">Odo Emmanuel</p>
-                    <p className="text-blue-600 text-sm font-medium">Cloud Sales Engineer</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 3 */}
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
-                <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
-                <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
-                  Flexible work arrangements and the focus on employee wellbeing allow me to balance my career and personal life perfectly.
-                </p>
-                <div className="flex items-center border-t border-zinc-100 pt-6">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                    OA
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-zinc-900 font-bold text-lg">Samuel Dorcas</p>
-                    <p className="text-indigo-600 text-sm font-medium">Senior Customer Support</p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        {/* Retained Animation Keyframes */}
-        <style jsx>{`
-    @keyframes gradient-x {
-      0%, 100% { background-position: 0% 50%; }
-      50%      { background-position: 100% 50%; }
-    }
-    .animate-gradient-x {
-      animation: gradient-x 12s ease infinite;
-    }
-    @keyframes fade-in-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up {
-      animation: fade-in-up 0.8s ease-out forwards;
-    }
-  `}</style>
-      </section>
-
+      {/* Testimonials Section */}
       <section className="bg-zinc-50 py-24 lg:py-32 relative overflow-hidden">
-        {/* Background decoration */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-gradient-to-tr from-indigo-200 to-purple-200 rounded-full opacity-30 blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 relative z-10">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Voices of the Team</h3>
+            <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
+              <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
+                I have learned so much since starting at Cloud Sentrics. Everyone is so friendly and supportive of my career goals. It's been such a positive experience!
+              </p>
+              <div className="flex items-center border-t border-zinc-100 pt-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
+                  MS
+                </div>
+                <div className="ml-4">
+                  <p className="text-zinc-900 font-bold text-lg">Mustapha Ibrahim</p>
+                  <p className="text-cyan-600 text-sm font-medium">Administrator</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
+              <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
+                The continuous learning opportunities and mentorship have accelerated my career in cloud security. The inclusive culture makes me feel valued every day.
+              </p>
+              <div className="flex items-center border-t border-zinc-100 pt-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
+                  FY
+                </div>
+                <div className="ml-4">
+                  <p className="text-zinc-900 font-bold text-lg">Odo Emmanuel</p>
+                  <p className="text-blue-600 text-sm font-medium">Cloud Sales Engineer</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-zinc-100 hover:shadow-2xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8 text-6xl text-cyan-100 font-serif leading-none">"</div>
+              <p className="text-zinc-600 text-lg leading-relaxed relative z-10 mb-6">
+                Flexible work arrangements and the focus on employee wellbeing allow me to balance my career and personal life perfectly.
+              </p>
+              <div className="flex items-center border-t border-zinc-100 pt-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                  OA
+                </div>
+                <div className="ml-4">
+                  <p className="text-zinc-900 font-bold text-lg">Samuel Dorcas</p>
+                  <p className="text-indigo-600 text-sm font-medium">Senior Customer Support</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recruitment Form & Contact Section */}
+      <section className="bg-zinc-50 py-24 lg:py-32 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-30 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-gradient-to-tr from-indigo-200 to-purple-200 rounded-full opacity-30 blur-3xl"></div>
 
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
-
-            {/* === LEFT COLUMN: Context & Contact Info === */}
+            {/* Left: Text & Contact */}
             <div className="space-y-8">
               <div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-6">
@@ -615,9 +497,7 @@ const CloudSentricsFeatures = () => {
                 </p>
               </div>
 
-              {/* Contact Info Cards */}
               <div className="space-y-4 pt-6">
-                {/* Email */}
                 <a
                   href="mailto:info@cloudsentrics.org"
                   className="block hover:no-underline focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-2xl transition-shadow hover:shadow-md"
@@ -635,7 +515,6 @@ const CloudSentricsFeatures = () => {
                   </div>
                 </a>
 
-                {/* US Number */}
                 <a
                   href="tel:+13465806298"
                   className="block hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-2xl transition-shadow hover:shadow-md"
@@ -657,7 +536,6 @@ const CloudSentricsFeatures = () => {
                   </div>
                 </a>
 
-                {/* Nigeria Number 1 */}
                 <a
                   href="tel:+2347056639388"
                   className="block hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-2xl transition-shadow hover:shadow-md"
@@ -679,14 +557,18 @@ const CloudSentricsFeatures = () => {
                   </div>
                 </a>
 
-                {/* Nigeria Number 2 */}
                 <a
                   href="tel:+2348144573546"
                   className="block hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-2xl transition-shadow hover:shadow-md"
                 >
                   <div className="flex items-center p-4 bg-white rounded-2xl shadow-sm border border-zinc-100 cursor-pointer">
                     <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
                     </div>
@@ -699,60 +581,154 @@ const CloudSentricsFeatures = () => {
               </div>
             </div>
 
-            {/* === RIGHT COLUMN: The Form === */}
+            {/* Right Column - Recruitment Form */}
+            {/* Right Column - Recruitment Form with base64 CV */}
             <div className="bg-white p-8 lg:p-10 rounded-3xl shadow-xl border border-zinc-100" id="submit-cv">
               <h3 className="text-2xl font-bold text-zinc-900 mb-6">Contact Our Recruitment Team</h3>
 
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                {/* Row 1: Name */}
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {/* First Name & Last Name */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="firstName" className="text-sm font-semibold text-zinc-700">First Name</label>
-                    <input type="text" id="firstName" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="John" />
+                    <label htmlFor="firstName" className="text-sm font-semibold text-zinc-700">
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      value={form.firstName}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                      placeholder="John"
+                    />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="lastName" className="text-sm font-semibold text-zinc-700">Last Name</label>
-                    <input type="text" id="lastName" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="Doe" />
+                    <input
+                      type="text"
+                      id="lastName"
+                      value={form.lastName}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                      placeholder="Doe"
+                    />
                   </div>
                 </div>
 
-                {/* Row 2: Company Details */}
+                {/* Company & Industry */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="company" className="text-sm font-semibold text-zinc-700">Company Name</label>
-                    <input type="text" id="company" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="Current Company" />
+                    <input
+                      type="text"
+                      id="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                      placeholder="Current Company"
+                    />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="industry" className="text-sm font-semibold text-zinc-700">Industry</label>
-                    <input type="text" id="industry" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="e.g. Fintech" />
+                    <input
+                      type="text"
+                      id="industry"
+                      value={form.industry}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                      placeholder="e.g. Fintech"
+                    />
                   </div>
                 </div>
 
-                {/* Row 3: Contact Info */}
+                {/* Email */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-semibold text-zinc-700">Email Address</label>
-                  <input type="email" id="email" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="john@example.com" />
+                  <label htmlFor="email" className="text-sm font-semibold text-zinc-700">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                    placeholder="john@example.com"
+                  />
                 </div>
 
+                {/* Phone */}
                 <div className="space-y-2">
                   <label htmlFor="phone" className="text-sm font-semibold text-zinc-700">Phone Number</label>
-                  <input type="tel" id="phone" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all" placeholder="+1 (555) 000-0000" />
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all"
+                    placeholder="+234 000 000 0000"
+                  />
                 </div>
 
                 {/* Message */}
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-semibold text-zinc-700">Message</label>
-                  <textarea id="message" rows="4" className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all resize-none" placeholder="Tell us a bit about yourself..."></textarea>
+                  <textarea
+                    id="message"
+                    rows="4"
+                    value={form.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-all resize-none"
+                    placeholder="Tell us a bit about yourself and your career goals..."
+                  />
                 </div>
 
-                {/* Upload CV Area */}
+                {/* CV Upload with base64 */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-zinc-700">Upload CV</label>
+                  <label className="text-sm font-semibold text-zinc-700">Upload CV (PDF or DOCX) – optional</label>
                   <div className="relative group">
-                    <input type="file" id="cv-upload" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
-                    <div className="w-full px-4 py-4 rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50/50 flex items-center justify-center gap-3 group-hover:border-cyan-400 group-hover:bg-cyan-50/50 transition-all">
-                      <svg className="w-6 h-6 text-zinc-400 group-hover:text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                      <span className="text-zinc-500 font-medium group-hover:text-cyan-700">Click to upload PDF or DOCX</span>
+                    <input
+                      type="file"
+                      id="cv-upload"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                    />
+                    <div
+                      className={`w-full px-4 py-5 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${cvError
+                        ? "border-red-400 bg-red-50/30"
+                        : form.cvFileName
+                          ? "border-emerald-400 bg-emerald-50/30"
+                          : "border-zinc-300 bg-zinc-50/50 group-hover:border-cyan-400 group-hover:bg-cyan-50/50"
+                        }`}
+                    >
+                      <svg
+                        className={`w-8 h-8 ${cvError ? "text-red-400" : form.cvFileName ? "text-emerald-500" : "text-zinc-400 group-hover:text-cyan-500"
+                          }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+
+                      {cvError ? (
+                        <span className="text-red-600 font-medium text-center">{cvError}</span>
+                      ) : form.cvFileName ? (
+                        <div className="text-center">
+                          <span className="font-medium text-emerald-700 block">{form.cvFileName}</span>
+                        </div>
+                      ) : (
+                        <span className="text-zinc-500 font-medium group-hover:text-cyan-700">
+                          Click to upload CV (max 5MB)
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -760,26 +736,49 @@ const CloudSentricsFeatures = () => {
                 {/* Checkboxes */}
                 <div className="space-y-3 pt-2">
                   <label className="flex items-start cursor-pointer group">
-                    <div className="flex items-center h-5">
-                      <input type="checkbox" className="w-5 h-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 accent-blue-600" />
-                    </div>
+                    <input
+                      type="checkbox"
+                      id="marketingEmails"
+                      checked={form.marketingEmails}
+                      onChange={handleChange}
+                      className="w-5 h-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 accent-blue-600 mt-0.5"
+                    />
                     <span className="ml-3 text-sm text-zinc-600 group-hover:text-zinc-900 transition-colors">
                       I'd like to receive marketing emails.
                     </span>
                   </label>
+
                   <label className="flex items-start cursor-pointer group">
-                    <div className="flex items-center h-5">
-                      <input type="checkbox" className="w-5 h-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 accent-blue-600" />
-                    </div>
+                    <input
+                      type="checkbox"
+                      id="keepOnFile"
+                      checked={form.keepOnFile}
+                      onChange={handleChange}
+                      className="w-5 h-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 accent-blue-600 mt-0.5"
+                    />
                     <span className="ml-3 text-sm text-zinc-600 group-hover:text-zinc-900 transition-colors">
                       Keep my details on file for future roles.
                     </span>
                   </label>
                 </div>
 
-                {/* Submit Button */}
-                <button type="submit" className="w-full py-4 px-6 bg-gradient-to-r from-blue-900 to-indigo-900 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-900/30 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900">
-                  Submit Application
+                {/* Status */}
+                {status && (
+                  <div
+                    className={`p-4 rounded-xl text-center border ${status.type === "success" ? "bg-green-50 text-green-800 border-green-200" : "bg-red-50 text-red-800 border-red-200"
+                      }`}
+                  >
+                    {status.msg}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`w-full py-4 px-6 bg-gradient-to-r from-blue-900 to-indigo-900 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-900/30 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 ${loading ? "opacity-60 cursor-not-allowed" : ""
+                    }`}
+                >
+                  {loading ? "Submitting Application..." : "Submit Application"}
                 </button>
               </form>
             </div>
@@ -787,6 +786,77 @@ const CloudSentricsFeatures = () => {
         </div>
       </section>
 
+      {/* No Open Roles Modal */}
+      {isNoOpenRolesModalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md px-4 sm:px-6"
+          onClick={() => setIsNoOpenRolesModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-lg bg-white rounded-3xl shadow-xl border border-gray-100/80 p-8 sm:p-10 overflow-hidden transform transition-all duration-300 ease-out scale-100 opacity-100 animate-in fade-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600" />
+
+            <button
+              className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+              onClick={() => setIsNoOpenRolesModalOpen(false)}
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center space-y-6">
+              <div className="mx-auto w-16 h-16 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 mb-2">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                No Open Positions Currently
+              </h3>
+
+              <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-prose mx-auto">
+                We’re not advertising any open roles at this time, but we’re always interested in connecting with talented individuals who share our passion for cloud innovation and excellence.
+              </p>
+
+              <p className="text-gray-500 text-sm sm:text-base">
+                Submit your resume / CV we’ll add you to our talent community and reach out when a suitable opportunity becomes available.
+              </p>
+
+              <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => {
+                    setIsNoOpenRolesModalOpen(false);
+                    document.getElementById("submit-cv")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600 rounded-full shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]"
+                >
+                  Submit Your CV
+                  <svg className="ml-2.5 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() => setIsNoOpenRolesModalOpen(false)}
+                  className="px-8 py-3.5 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 rounded-full transition-colors duration-200"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

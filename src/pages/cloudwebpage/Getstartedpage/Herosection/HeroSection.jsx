@@ -20,7 +20,7 @@ const EducationHero = () => {
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-8 md:mb-12">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600 bg-clip-text text-transparent">
-              Get started with CloudSentrics
+              Get started with Cloud Sentrics
             </span>
           </h1>
 

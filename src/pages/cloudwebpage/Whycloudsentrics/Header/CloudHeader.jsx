@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const CloudHeader = () => {
   const location = useLocation();
@@ -101,6 +100,7 @@ const CloudHeader = () => {
     setLockedDropdown(null);
     setMobileSubMenu(null);
     setIsOpen(false);
+    document.body.style.overflow = ''; 
   };
 
   const DesktopMenuItem = ({ children, href, external = false }) => (
@@ -120,13 +120,13 @@ const CloudHeader = () => {
     <table className="w-full border-collapse">
       <thead>
         <tr>
-          <th className="text-left pb-4 w-1/2">
-            <span className="inline-block border-b-2 border-slate-400 pb-1.5 px-3 min-w-[215px]" style={headerFontStyle}>
+          <th className="text-left pb-3 w-1/2">
+            <span className="inline-block border-b-2 border-slate-400 pb-1 px-3 min-w-[215px]" style={headerFontStyle}>
               Industries
             </span>
           </th>
-          <th className="text-left pb-4 w-1/2">
-            <span className="inline-block border-b-2 border-slate-400 pb-1.5 px-3 min-w-[205px]" style={headerFontStyle}>
+          <th className="text-left pb-3 w-1/2">
+            <span className="inline-block border-b-2 border-slate-400 pb-1 px-3 min-w-[205px]" style={headerFontStyle}>
               Use Case
             </span>
           </th>
@@ -135,7 +135,7 @@ const CloudHeader = () => {
       <tbody>
         {Array.from({ length: Math.max(industries.length, useCases.length) }).map((_, index) => (
           <tr key={index}>
-            <td className="py-2 pr-6">
+            <td className="py-1.5 pr-6">
               {index < industries.length ? (
                 <DesktopMenuItem href={industries[index].href}>
                   {industries[index].label}
@@ -144,7 +144,7 @@ const CloudHeader = () => {
                 <div className="px-5 py-3 invisible" style={fontStyle}>Placeholder</div>
               )}
             </td>
-            <td className="py-2">
+            <td className="py-1.5">
               {index < useCases.length ? (
                 <DesktopMenuItem href={useCases[index].href}>
                   {useCases[index].label}
@@ -247,8 +247,8 @@ const CloudHeader = () => {
             className="flex-shrink-0 transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#04D1FF]/50 rounded-lg"
           >
             <img
-              src="/cloud.png"
-              alt="Cloud Sentrics Logo - Home"
+              src="/cloud-logo.png"
+              alt="Cloud Sentrics Logo"
               className="h-20 md:h-23 lg:h-24 w-auto object-contain"
             />
           </Link>
@@ -270,24 +270,22 @@ const CloudHeader = () => {
                 >
                   <a
                     href={link.href}
-                    // Only prevent default if it has submenu AND no real href
                     onClick={(e) => {
                       if (hasSubmenu && link.href === '#') {
                         e.preventDefault();
                       }
-                      // Optional: toggle lock on click (for accessibility / touch devices)
                       if (hasSubmenu) {
                         setLockedDropdown(lockedDropdown === link.label ? null : link.label);
                       }
                     }}
                     className={`
-            flex items-center px-3 py-2 rounded-md text-slate-200 
-            hover:text-[#04D1FF] hover:bg-slate-800/40 transition-colors duration-200
-            ${activeDropdown === link.label || lockedDropdown === link.label
+                      flex items-center px-3 py-2 rounded-md text-slate-200 
+                      hover:text-[#04D1FF] hover:bg-slate-800/40 transition-colors duration-200
+                      ${activeDropdown === link.label || lockedDropdown === link.label
                         ? 'text-[#04D1FF] bg-slate-800/30'
                         : ''
                       }
-          `}
+                    `}
                     style={fontStyle}
                   >
                     {link.label}
@@ -304,12 +302,13 @@ const CloudHeader = () => {
                         exit={{ opacity: 0, y: 6, scale: 0.98 }}
                         transition={{ duration: 0.15 }}
                         className={`
-                absolute top-full left-1/2 -translate-x-1/2 mt-3
-                ${link.label === 'Solution' ? 'w-[580px]' : 'w-72'}
-                bg-white text-black rounded-xl shadow-2xl p-6 lg:p-7 z-50 
-                border border-slate-200/80
-              `}
-                        onMouseEnter={() => setActiveDropdown(link.label)} // keep open when hovering submenu
+                          absolute top-full left-1/2 -translate-x-1/2 mt-3
+                          ${link.label === 'Solution' ? 'w-[580px]' : 'w-72'}
+                          bg-white text-black rounded-xl shadow-2xl 
+                          ${link.label === 'Solution' ? 'p-5 lg:p-6' : 'p-6 lg:p-7'} 
+                          z-50 border border-slate-200/80
+                        `}
+                        onMouseEnter={() => setActiveDropdown(link.label)}
                         onMouseLeave={() => {
                           setActiveDropdown(null);
                           setLockedDropdown(null);
@@ -324,13 +323,13 @@ const CloudHeader = () => {
             })}
           </nav>
 
-          <a
-            href="/get-started"
+          <Link
+            to="/get-started"
             className="hidden sm:block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-200 shadow-md"
             style={fontStyle}
           >
             Get started
-          </a>
+          </Link>
 
           <button className="md:hidden text-white text-2xl" onClick={() => setIsOpen(true)}>
             <FaBars />
@@ -365,21 +364,34 @@ const CloudHeader = () => {
               <div className="p-4 space-y-1">
                 {navLinks.map((link) => (
                   <div key={link.label}>
-                    <button
-                      onClick={(e) => handleMenuClick(e, link)}
-                      className="w-full flex justify-between items-center py-4 px-5 text-slate-200 hover:text-[#04D1FF] hover:bg-slate-800/70 rounded-xl transition min-h-[52px]"
-                      style={fontStyle}
-                    >
-                      {link.label}
-                      {link.submenu !== null && (
+                    {link.submenu !== null ? (
+                      <button
+                        onClick={(e) => handleMenuClick(e, link)}
+                        className="w-full flex justify-between items-center py-4 px-5 text-slate-200 hover:text-[#04D1FF] hover:bg-slate-800/70 rounded-xl transition min-h-[52px]"
+                        style={fontStyle}
+                      >
+                        {link.label}
                         <FaChevronDown
                           className={`text-sm transition-transform ${mobileSubMenu === link.label ? 'rotate-180' : ''}`}
                         />
-                      )}
-                    </button>
+                      </button>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        onClick={() => {
+                          setIsOpen(false);
+                          setMobileSubMenu(null);
+                          document.body.style.overflow = '';
+                        }}
+                        className="block py-4 px-5 text-slate-200 hover:text-[#04D1FF] hover:bg-slate-800/70 rounded-xl transition min-h-[52px]"
+                        style={fontStyle}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
 
                     <AnimatePresence>
-                      {mobileSubMenu === link.label && (
+                      {mobileSubMenu === link.label && link.submenu !== null && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
@@ -395,13 +407,17 @@ const CloudHeader = () => {
               </div>
 
               <div className="p-5 border-t border-slate-800 mt-4">
-                <a
-                  href="/get-started"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl transition text-base font-medium"
+                <Link
+                  to="/get-started"
+                  onClick={() => {
+                    setIsOpen(false);
+                    document.body.style.overflow = '';
+                  }}
+                  className="w-full block bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl transition text-base font-medium text-center"
                   style={fontStyle}
                 >
                   Get started
-                </a>
+                </Link>
               </div>
             </motion.nav>
           </>

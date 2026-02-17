@@ -36,7 +36,7 @@ const EducationHero = () => {
             transition={{ delay: 0.35, duration: 1 }}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-100/92 font-light leading-relaxed mb-10 md:mb-14"
           >
-            Cloud Sentrics gives your organization full control and security over its data stable, scalable, and easy to use for teams of any size. Protect sensitive information while enabling seamless collaboration across devices and locations.
+            Cloud Sentrics gives your organization full control and security over its data through a stable, scalable, and easy to use solution designed for teams of any size. Protect sensitive information while enabling seamless collaboration across devices and locations.
           </motion.p>
 
           <motion.div
