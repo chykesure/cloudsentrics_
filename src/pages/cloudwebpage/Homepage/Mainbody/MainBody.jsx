@@ -226,6 +226,23 @@ const MainBody = () => {
             {/* ──────────────────────── Badges ──────────────────────── */}
             <div className="mt-16 md:mt-20 flex justify-center px-4">
               <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14 xl:gap-16 max-w-8xl">
+                <img
+                  src="/NDPC_CERT.jpeg"
+                  alt="NDPC Certificate"  // ← better alt text
+                  className="
+    w-full max-w-3xl mx-auto    // ← centers it + reasonable max width
+    max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh]   // ← 70-80% of viewport height feels balanced
+    object-contain
+    drop-shadow-[0_20px_60px_rgba(0,31,63,0.35)]
+    transition-all duration-700
+    hover:scale-[1.03]
+  "
+                />
+              </div>
+            </div>
+
+            <div className="mt-16 md:mt-20 flex justify-center px-4">
+              <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14 xl:gap-16 max-w-8xl">
                 {complianceBadges.map((badge) => (
                   <div
                     key={badge.label}

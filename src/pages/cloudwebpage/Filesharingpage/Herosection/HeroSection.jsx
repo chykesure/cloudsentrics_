@@ -45,7 +45,7 @@ const EducationHero = () => {
             transition={{ delay: 0.65, duration: 0.9 }}
           >
             <motion.a
-              href="/get-started"
+              href="/pricing"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               className="

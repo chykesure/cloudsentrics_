@@ -16,7 +16,8 @@ const CheckItem = ({ children }) => (
 const CloudSentricsFeatures = () => {
   const SCRIPT_URL =
     //"https://script.google.com/macros/s/AKfycbw2EcSnnwWvKabUvtmVl64LeNPrGxetnY-7976l626Jzh7AMoJDCVF4szz8QHyPF8A/exec";
-    "https://script.google.com/macros/s/AKfycbwiQKXzJPspOIVN-xvKf7gwfZGNn9RNCzO-0T1yX0WZHjYAfetJK-iceIzQ-S22xPEw/exec";
+    //"https://script.google.com/macros/s/AKfycbwiQKXzJPspOIVN-xvKf7gwfZGNn9RNCzO-0T1yX0WZHjYAfetJK-iceIzQ-S22xPEw/exec";
+  "https://script.google.com/macros/s/AKfycbxSE_xIFvjzZyM846MLc14ZtEYoKbzXCASIMhLptAzfzgXN43X6IL5RiR5FLZZHvEy-/exec";
 
   const [isNoVacancyModalOpen, setIsNoVacancyModalOpen] = useState(false);
   const [isNoOpenRolesModalOpen, setIsNoOpenRolesModalOpen] = useState(false);
